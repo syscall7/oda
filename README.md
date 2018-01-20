@@ -23,8 +23,7 @@ Collaboration requires signing into ODA with a username and password.
 
 If you have any questions about, feedback for or a problem with ODA:
 
-* Ask a question on the TBD mailing list
-* Sending an email to oda@syscall7.com
+* Ask a question on the [Mailing List](https://groups.google.com/a/syscall7.com/forum/#!forum/oda)
 * [Open an Issue](https://github.com/syscall7/oda/issues/new)
 
 ## Contributing to ODA
