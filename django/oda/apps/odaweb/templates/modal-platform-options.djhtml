@@ -1,0 +1,58 @@
+<div id="modal-platform-options" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>Platform Options</h3>
+            </div>
+            <div class="modal-body">
+                <!-- Display an information message -->
+                <div id="modal-platform-msg">
+
+                </div>
+                <div id="modal-platform-options-form">
+                <form>
+                    <select class="platformSelect" id="select-open-architecture" name="select-open-architecture">
+                        {% for a in supported_archs %}
+                            <option
+                                    {% if a == binary.options.architecture %}selected="selected"{% endif %}>
+                                {{ a }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <div>
+                        <label class="control-label">Base Address</label>
+
+                        <div class="controls">
+                            <input id="set-base-address" name="base_address" type="text" placeholder="0x00000000"
+                                   class="input-small">
+                        </div>
+                    </div>
+
+                    <div id="open-platform-options">
+                        {% include 'show_options.djhtml' %}
+                    </div>
+
+                </form>
+                </div>
+
+                {% if form.errors %}
+                    <div class="alert alert-error" id="open-alert">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <ul>
+                            {% for field,error in form.errors.items %}
+                                <li>{{ field }}: {{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+                <a id="upload-options-submit-btn" href="#" class="btn btn-primary">Ok</a>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div><!-- /.modal -->

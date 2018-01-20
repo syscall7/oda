@@ -1,0 +1,4 @@
+- hosts: web
+  roles:
+    - common
+    - nodejs

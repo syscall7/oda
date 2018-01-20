@@ -1,0 +1,70 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load account socialaccount %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+
+{% block content %}
+
+    <form class="form-signin" role="form" method="POST" action="{% url 'account_login' %}">
+        <img src="{% static "images/oda_logo4.png" %}" style="height:100px; right:0px; top: 0px; position:absolute;"/>
+
+        <h1>{% trans "Sign in" %}</h1>
+
+        {% get_providers as socialaccount_providers %}
+
+        {% if socialaccount_providers %}
+        <p>{% blocktrans with site.name as site_name %}Please sign in with one
+            of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>
+            for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
+
+        <div class="socialaccount_ballot">
+
+            <ul class="socialaccount_providers">
+                {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+            </ul>
+
+            <div class="login-or">{% trans 'or' %}</div>
+
+        </div>
+
+        {% include "socialaccount/snippets/login_extra.html" %}
+
+        {% else %}
+        <p>{% blocktrans %}If you have not created an account yet, then please
+            <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
+        {% endif %}
+
+        {% csrf_token %}
+
+        {{ form.non_field_errors }}
+
+        <label for="inputLogin" class="sr-only">Username</label>
+        {{ form.login.errors }}
+        {% render_field form.login class+="form-control" placeholder="Username" %}
+
+        <label for="inputPassword" class="sr-only">Password</label>
+        {{ form.password.errors }}
+        {% render_field form.password class+="form-control" placeholder="Password" %}
+
+
+        <div class="checkbox">
+          <label>
+            <input id="id_remember" name="remember" type="checkbox"> Remember me
+            <!--<input type="checkbox" value="remember-me"> -->
+          </label>
+        </div>
+
+
+        <button class="btn btn-lg btn-primary btn-block btn-submit" type="submit">Sign In</button>
+
+        <a href="{% url 'account_reset_password' %}" style="margin-top:80px">Forgot Password?</a>
+
+    </form>
+
+
+
+{% endblock %}

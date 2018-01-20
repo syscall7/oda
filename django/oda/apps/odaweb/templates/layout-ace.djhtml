@@ -1,0 +1,167 @@
+{% load staticfiles %}
+{% load tags %}
+{% load compress %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <title>{%  block title %}ODA - The Online Disassembler{% endblock %}</title>
+    <link rel="icon" type="image/png" href="{% static 'images/oda.png' %}" />
+
+    <meta charset="utf-8">
+    <meta name="description" content="ODA is an online disassembler for a wide range of machine architectures, including: Alpha, ARM, AVR, Intel x86, Motorola 68000, MIPS, PDP-11, PowerPC, SPARC, Z80, and more!  Upload a Windows PE file, ELF, or raw binary and then view the disassembly and object file meta date such as symbols and sections.">
+    <meta name="author" content="">
+    <meta name="keywords" content="online disassembler, reversing, reverse engineering, ELF, portable executable, Windows PE, binary, program analysis, malware, shell code, Alpha, ARM, AVR, Intel x86, Motorola 68000, MIPS, PDP-11, PowerPC, SPARC, Z80" />
+
+
+    {% compress css %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'scripts/lib/nprogress/nprogress.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'scripts/lib/font-awesome-4.0.3/css/font-awesome.css' %}" />
+
+
+    <link rel="stylesheet" type="text/css" href="{% static 'scripts/lib/bootstrap-3.2/css/bootstrap.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'scripts/lib/bootstrap-3.2/css/bootstrap-theme.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'scripts/lib/context/context.standalone.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'scripts/lib/font-awesome-4.0.3/css/font-awesome.css' %}" />
+
+    <link rel="stylesheet" type="text/css" href="{% static 'scripts/lib/ui-layout/layout-default-latest.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'scripts/lib/toastr/toastr.css' %}"/>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'scripts/lib/slickgrid/slick.grid.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'scripts/lib/slickgrid/slick-default-theme.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'scripts/lib/slickgrid/examples.css' %}"/>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'scripts/lib/bootstrap-tour/css/bootstrap-tour.min.css' %}"/>
+
+
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/oda3.css' %}" />
+
+    {% endcompress %}
+
+
+    {% compress js %}
+    <script type="text/javascript" src="{% static 'scripts/lib/keypress-2.0.3.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/lib/jquery/jquery-1.11.1.min.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'scripts/lib/jquery.cookie.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'scripts/lib/context/context.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/lib/bootstrap-3.2/js/bootstrap.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/lib/angular-1.2.26/angular.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/lib/angular-1.2.26/angular-route.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/lib/angular-1.2.26/angular-sanitize.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/lib/ui-utils-0.1.1/ui-utils.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/lib/ui-bootstrap-tpls-0.11.0.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/lib/socket.io-2.0.4.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/lib/bootstrap-tour/js/bootstrap-tour.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'scripts/lib/toastr/toastr.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'scripts/lib/ui-layout/jquery.layout-rc30.79.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'scripts/lib/handlebars-v1.3.0.js' %}" ></script>
+
+    <script type="text/javascript" src="{% static 'scripts/lib/nprogress/nprogress.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'scripts/lib/underscore-1.3.3.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'scripts/lib/jquery-ui-latest.js' %}"></script>
+
+    {%  endcompress %}
+
+    <script type="text/javascript">
+        window.user = {
+            username : '{% if not user.is_authenticated %}anonymous{% else %}{{ user.username }}{% endif %}',
+            authenticated: {% if user.is_authenticated and not user.is_lazy_user %} true {% else  %} false {%  endif %}
+        };
+    </script>
+
+<style id="css">
+
+    .node rect {
+  stroke: #333;
+  fill: #fff;
+}
+
+.edgePath path {
+  stroke: #333;
+  fill: #333;
+  stroke-width: 1.5px;
+}
+</style>
+
+
+    {% block head %}
+    {% endblock %}
+
+</head>
+<body>
+
+    {% block body %}
+    {% endblock %}
+
+    <script type="text/javascript">
+
+	    var _gaq = _gaq || [];
+	    _gaq.push(['_setAccount', 'UA-25987200-1']);
+	    _gaq.push(['_trackPageview']);
+
+	    (function() {
+	        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	    })();
+
+	</script>
+
+    {% compress js %}
+
+    <script type="text/javascript" src="{% static 'scripts/lib/dagre/d3.v3.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/lib/dagre/dagre-d3.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'scripts/addrbar.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'scripts/oda.main.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'scripts/oda.handlebars.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'scripts/oda.tour.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'scripts/oda.statusbar.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'scripts/oda.commands.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'scripts/oda.renderer.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'scripts/oda.dock.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'scripts/oda.graph.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'scripts/oda.decompiler.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'scripts/models/oda.localmodel.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'scripts/models/oda.remotemodel.js' %}" ></script>
+
+    <script type="text/javascript" src="{% static 'scripts/lib/slickgrid/jquery.event.drag-2.2.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/lib/slickgrid/slick.core.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/lib/slickgrid/slick.grid.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/oda.grid.js' %}" ></script>
+
+
+    <script type="text/javascript" src="{% static 'scripts/odbfile.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/context.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/shortcuts.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/socket.js' %}"></script>
+
+
+    <script type="text/javascript" src="{% static 'scripts/controllers/SymbolsController.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/controllers/LiveEntryController.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/controllers/OptionsViewController.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/controllers/StringsController.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/controllers/FindBytesController.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/controllers/SectionsController.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/controllers/StructTypesController.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/controllers/AboutController.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/controllers/GotoAddressController.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/controllers/RuntimeDumpController.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/controllers/HexController.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/controllers/NavbarController.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/controllers/UploadFileController.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/controllers/MonitorSandboxController.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/controllers/ConfigureFileController.js' %}"></script>
+
+    {%  endcompress %}
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+diff -ruN cuckoomon/cuckoomon.c cuckoomon_oda/cuckoomon.c
+--- cuckoomon/cuckoomon.c	2014-09-21 12:28:51.009626399 -0400
++++ cuckoomon_oda/cuckoomon.c	2014-08-23 16:04:19.793938226 -0400
+@@ -419,6 +419,9 @@
+         }
+     }
+     else if(dwReason == DLL_PROCESS_DETACH) {
++        char event[64];
++        sprintf(event, "EVENT: %d EXITING", GetCurrentProcessId());
++        pipe(event);
+         log_free();
+     }
+ 
+Binary files cuckoomon/cuckoomon.dll and cuckoomon_oda/cuckoomon.dll differ
+diff -ruN cuckoomon/hook_process.c cuckoomon_oda/hook_process.c
+--- cuckoomon/hook_process.c	2014-09-21 12:28:51.009626399 -0400
++++ cuckoomon_oda/hook_process.c	2014-08-23 16:04:42.325654963 -0400
+@@ -270,9 +270,12 @@
+ ) {
+     IS_SUCCESS_VOID();
+ 
++    char event[64];
+     int ret = 0;
+     LOQ("l", "ExitCode", uExitCode);
+     log_free();
++    sprintf(event, "EVENT: %d EXITING", GetCurrentProcessId());
++    pipe(event);
+     Old_ExitProcess(uExitCode);
+ }

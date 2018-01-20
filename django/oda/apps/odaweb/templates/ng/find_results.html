@@ -1,0 +1,53 @@
+{% verbatim %}
+
+<script type="text/ng-template" id="find_results.html">
+
+<div  ng-controller="FindBytesController">
+
+    <div class="oda-sidebar-title">Find Bytes</div>
+    <form ng-submit="find(data.search_pattern)">
+        <fieldset>
+            <!-- Find Pattern -->
+            <div class="form-group">
+                <div class="input-group">
+                    <input id="search-pattern" name="search-pattern" class="form-control"
+                         placeholder="search pattern" type="text" ng-model="data.search_pattern"
+                         popover-title="Search Pattern"
+                         popover-placement="bottom"
+                         popover="{{ data.searchHelp }}"
+                         popover-trigger="focus"
+                    />
+                    <div class="input-group-btn">
+                        <input type="submit" class="btn btn-primary" value="Find" />
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+
+    <div class="sidebar-scroll-container">
+        <table class="table table-striped sidebar-table" id="find-results-table">
+            <thead>
+                <tr>
+                    <th>Address</th>
+                    <th>Section</th>
+                </tr>
+            </thead>
+            <tbody class="scrollContent">
+                    <tr ng-repeat="result in data.results">
+                        <td class="result-offset" style="width:1%">
+                            <span class="clickable" ng-click="setPosition(result.addr)">0x{{ result.addr.toString(16) }}</span>
+                        </td>
+                        <td class="section" align="left">{{ result.section }}</td>
+                    </tr>
+            </tbody>
+        </table>
+
+        <div ng-show="!data.results">
+            <em>No results found</em>
+        </div>
+    </div>
+</div>
+
+</script>
+{% endverbatim %}

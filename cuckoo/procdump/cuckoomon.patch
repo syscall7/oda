@@ -1,0 +1,31 @@
+diff --git a/cuckoomon.c b/cuckoomon.c
+index f3c422f..41ac0b3 100644
+--- a/cuckoomon.c
++++ b/cuckoomon.c
+@@ -419,6 +419,9 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD dwReason, LPVOID lpReserved)
+         }
+     }
+     else if(dwReason == DLL_PROCESS_DETACH) {
++        char event[64];
++        sprintf(event, "EVENT: %d EXITING", GetCurrentProcessId());
++        pipe(event);
+         log_free();
+     }
+ 
+diff --git a/hook_process.c b/hook_process.c
+index 5aef7a1..1f83111 100644
+--- a/hook_process.c
++++ b/hook_process.c
+@@ -270,9 +270,12 @@ HOOKDEF(VOID, WINAPI, ExitProcess,
+ ) {
+     IS_SUCCESS_VOID();
+ 
++    char event[64];
+     int ret = 0;
+     LOQ("l", "ExitCode", uExitCode);
+     log_free();
++    sprintf(event, "EVENT: %d EXITING", GetCurrentProcessId());
++    pipe(event);
+     Old_ExitProcess(uExitCode);
+ }
+ 

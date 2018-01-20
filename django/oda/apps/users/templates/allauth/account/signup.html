@@ -1,0 +1,84 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load widget_tweaks %}
+{% load static %}
+{% load account socialaccount %}
+
+{% block head_title %}{% trans "Signup" %}{% endblock %}
+
+{% block content %}
+{%  comment %}
+    <h1>{% trans "Sign Up" %}</h1>
+
+    <p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}
+    </p>
+
+    <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+        {% endif %}
+        <button type="submit">{% trans "Sign Up" %} &raquo;</button>
+    </form>
+{% endcomment %}
+
+    <form class="form-signin" role="form" method="post" action="{% url 'account_signup' %}">
+        <img src="{% static "images/oda_logo4.png" %}" style="height:100px; right:0px; top: 0px; position:absolute;"/>
+
+        <h1>{% trans "Sign Up" %}</h1>
+
+
+
+        <p>
+            {% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}
+        </p>
+
+        {% get_providers as socialaccount_providers %}
+
+        {% if socialaccount_providers %}
+
+        <p>{% blocktrans with site.name as site_name %}Please sign in with one
+        of your existing third party accounts. Or create an account by username.{% endblocktrans %}</p>
+
+        <div class="socialaccount_ballot">
+
+          <ul class="socialaccount_providers">
+            {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+          </ul>
+
+        </div>
+
+        {% include "socialaccount/snippets/login_extra.html" %}
+
+        {% else %}
+        <p>{% blocktrans %}If you have not created an account yet, then please
+        <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
+        {% endif %}
+
+        {% csrf_token %}
+
+
+        <label for="inputEmail" class="sr-only">Username</label>
+        {{ form.username.errors }}
+        {% render_field form.username class+="form-control" placeholder="Username" %}
+
+        <label for="inputEmail" class="sr-only">Email address</label>
+        {{ form.email.errors }}
+        {% render_field form.email class+="form-control" placeholder="Email Address" %}
+
+        <label for="inputPassword1" class="sr-only">Password</label>
+        {{ form.password1.errors }}
+        {% render_field form.password1 class+="form-control" placeholder="Password" %}
+
+        <label for="inputPassword2" class="sr-only">Repeat Password</label>
+        {{ form.password2.errors }}
+        {% render_field form.password2 class+="form-control" placeholder="Password (again)" %}
+
+        <button class="btn btn-lg btn-primary btn-block btn-submit" type="submit">Create Account</button>
+    </form>
+
+{% endblock %}
+
+

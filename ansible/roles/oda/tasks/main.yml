@@ -1,0 +1,106 @@
+- fail: msg="Must specify oda_source_path"
+  when: oda_source_path is not defined or oda_source_path == None or oda_source_path == ""
+- fail: msg="Must specify oda_install_path"
+  when: oda_install_path is not defined or oda_install_path == None or oda_install_path == ""
+
+- name: Install app packages
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    cache_valid_time: 3600
+  with_items:
+    - libxml2-dev
+    - libxslt1-dev
+    - texinfo
+    - patch
+    - gcc
+    - make
+    - autoconf
+    - texinfo
+    - bzip2
+    - cython
+    - unzip
+    - libboost-dev
+    - qtbase5-dev
+    - libpython-dev
+    - libpython3-dev
+    - libmysqlclient-dev
+    - libssl-dev
+    - libffi-dev
+    - build-essential
+    - zlib1g-dev
+    - binutils-multiarch
+    - binutils-multiarch-dev
+  become: yes
+
+- name: Create site directory
+  file:
+    name: "{{ oda_install_path }}"
+    state: directory
+    owner: "{{ oda_user }}"
+    group: "{{ oda_group }}"
+
+- name: Copy site files
+  synchronize:
+    src: "{{ oda_source_path }}/django/"
+    dest: "{{ oda_install_path }}/site"
+  delegate_to: "{{ inventory_hostname }}"
+
+- name: Initiate virtualenv
+  pip:
+    virtualenv: "{{ oda_install_path }}/env"
+    virtualenv_python: python3.5
+    requirements: "{{ oda_install_path }}/site/requirements.txt"
+
+- name: Set default virtualenv in .profile
+  lineinfile:
+    dest: "~{{ oda_user }}/.profile"
+    line: "source {{ oda_install_path }}/env/bin/activate"
+
+- name: Setup environment variables
+  set_fact:
+    oda_environment:
+      ODA_MEDIA_ROOT: "{{ oda_django_media_root }}"
+      ODA_MYSQL_DATABASE: "{{ oda_mysql_database }}"
+      ODA_MYSQL_USER: "{{ oda_mysql_user }}"
+      ODA_MYSQL_PASSWORD: "{{ oda_mysql_password }}"
+
+- name: Install environment variables into profile
+  lineinfile:
+    regexp: "^export {{ item.key }}=.*"
+    dest: "~{{ oda_user }}/.profile"
+    line: "export {{ item.key }}={{ item.value }}"
+  with_dict: "{{ oda_environment }}"
+
+- name: Create media directories
+  file:
+    name: "{{ oda_django_media_root }}/{{ item }}"
+    state: directory
+    owner: "{{ oda_user }}"
+    group: "{{ oda_group }}"
+  with_items:
+    - cache
+    - uploads
+
+- block:
+  - set_fact:
+      oda_django_manage: "{{ oda_install_path }}/env/bin/python {{ oda_install_path }}/site/manage.py"
+
+  - name: Check database migration status
+    shell: "{{ oda_django_manage }} showmigrations --list | grep '\\[ \\]'"
+    register: oda_migration_status
+    changed_when: false
+    failed_when: false
+
+  - name: Migrate database
+    command: "{{ oda_django_manage }} migrate --settings {{ oda_django_settings }}"
+    when: oda_migration_status.rc == 0
+
+  - name: Run app setup scripts
+    command: "{{ oda_django_manage }} setup_oda --settings {{ oda_django_settings }}"
+    with_items:
+      - setup_oda
+      - setup_openid
+    changed_when: false
+
+  environment: "{{ oda_environment }}"

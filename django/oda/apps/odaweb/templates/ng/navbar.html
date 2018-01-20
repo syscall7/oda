@@ -1,0 +1,154 @@
+{% verbatim %}
+
+<script type="text/ng-template" id="navbar.html">
+
+<div class="navbar navbar-fixed-top navbar-inverse" role="navigation" ng-controller="NavbarController">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" style="padding-left: 70px;" href="/">ODA</a>
+    </div>
+    <div class="navbar-collapse collapse">
+
+    <ul class="nav navbar-nav" style="padding-left:100px;">
+        <!-- <li class="share-btn">
+            <a href=""
+               ng-click="saveAndRedirect()"
+
+
+
+               id="menu-item-share">
+                    <i class="glyphicon glyphicon-share glyphicon-white"></i>Share
+            </a>
+        </li> -->
+
+       <!-- File Menu -->
+       <li class="dropdown">
+            <a class="dropdown-toggle" href="#" id="menu-item-file">File<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li><a id="open-btn" ng-click="openFile()">
+                    <i class="glyphicon glyphicon-upload"></i>&nbsp;Upload File...</a>
+                </li>
+                <li><a id="download-btn" ng-click="downloadDisassembly()">
+                    <i class="glyphicon glyphicon-download"></i>&nbsp;Download Disassembly</a>
+                </li>
+                <li><a href="/odaweb/strcpy_x86">
+                    <i class="glyphicon glyphicon-play-circle"></i> Live Mode</a>
+                </li>
+                <!--<li class="dropdown-submenu"><a href="#" tab-index="-1"><i class="icon-file"></i>&nbsp;New</a>
+                    <ul class="dropdown-menu">
+
+                    </ul>
+                </li>
+                <li class="dropdown-submenu"><a href="#" tab-index="-1"><i class="icon-folder-open"></i>&nbsp;Open Existing</a>
+                    <ul id="open-existing-list" class="dropdown-menu">
+                        <li class="disabled"><a href="#">No files exist</a></li>
+                    </ul>
+                </li>
+                <li class="divider"></li>
+                <li><a href="/odaweb/_save"><i class="icon-share"></i>Share</a></li>
+                <li><a href="#">Download</a></li>-->
+            </ul>
+        </li>
+
+       <!-- Edit Menu -->
+       <li class="dropdown">
+            <a class="dropdown-toggle"  href="#">Edit<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <!--
+                <li><a href="#">Undo</a></li>
+                <li><a href="#">Redo</a></li>
+                <li class="divider"></li>
+                <li><a class="nav-btn"
+                       rel="tooltip"
+                       data-original-title="Platform Settings"
+                       data-panel="platform-display" href="#"><i class="icon-pencil"></i>&nbsp;Platform Options</a></li>
+                <li class="divider"></li>
+                 -->
+                <li><a id="menu-go-to-addr" ng-click="goToAddressPrompt()" href="#">Go to address... (Ctrl-g)</a></li>
+                <li><a ng-click="findSequence()" href="#">Find sequence of bytes... (Ctrl-f)</a></li>
+
+            </ul>
+        </li>
+
+        <!-- Examples Menu -->
+       <li class="dropdown">
+            <a class="dropdown-toggle"  href="#">Examples<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <!-- TODO: Build this list dynamically -->
+                <li ng-repeat="example in examples">
+                    <a href ng-click="loadExample(example)">{{ example.project_name }}</a>
+                </li>
+            </ul>
+       </li>
+
+       <!-- Help Menu -->
+       <li class="dropdown">
+            <a class="dropdown-toggle" href="#">Help<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li><a ng-click="whatsOda()">What's ODA?</a></li>
+                <li><a id='tutorial-btn' href="/doc">Documentation</a></li>
+                <li class="divider"></li>
+                <li><a ng-click="about()">About</a></li>
+            </ul>
+        </li>
+
+        <!-- Blog Menu
+        <li class="">
+            <a href="http://blog.onlinedisassembler.com/blog/">Blog</a>
+        </li> -->
+        <!-- Contact Us Menu -->
+        <li class="">
+            <a href=mailto:admin@onlinedisassembler.com>Contact Us!</a>
+        </li>
+    </ul>
+
+
+
+      <div class="navbar-form navbar-right" ng-if="!isAuthenticated()">
+        <!--<div class="form-group">
+          <input type="text" placeholder="Username" class="form-control" ng-model="credentials.username">
+        </div>
+        <div class="form-group">
+          <input type="password" placeholder="Password" class="form-control" ng-model="credentials.password">
+        </div>-->
+          <button class="btn btn-default" ng-click="loginPage()">Sign in</button>
+          <button class="btn btn-success" ng-click="createAccount()">Sign Up</button>
+      </div>
+
+      <ul class="nav navbar-nav navbar-right" ng-if="isAuthenticated()">
+        <li
+            ng-repeat="user in connectedUsers"
+            class="navbar-text"
+            popover="{{ user.username }}"
+            style="padding:0px 5px; background-color:{{ user.color }}; color:black;  border: 1px solid rgba(0, 0, 0, 0.1);"
+            popover-trigger="mouseenter"
+            popover-placement="bottom"
+        >{{ user.username | limitTo:1 | uppercase}}</li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle">{{ currentUser.username }} <i class="fa fa-user fa-lg"></i><span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="/user/files"><i class="fa fa-folder-open fa-lg"></i> Profile</a></li>
+            <!-- <li><a href="" ng-click="share()"><i class="fa fa-share-square fa-lg"></i> Share This Session Live</a></li> -->
+            <li><a href="" ng-click="logout()"><i class="fa fa-sign-out fa-lg"></i> Sign Out</a></li>
+          </ul>
+        </li>
+
+        <li>
+             <a href="" ng-click="logout()"><i class="fa fa-sign-out fa-lg"></i></a>
+        </li>
+
+      </ul>
+
+    </div><!--/.navbar-collapse -->
+  </div>
+
+</div>
+
+</script>
+{% endverbatim %}

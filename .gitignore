@@ -1,0 +1,40 @@
+# OS-specific
+.DS_Store
+
+# Editor swapfiles
+.*.sw?
+*~
+
+# Vagrant
+.vagrant
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Cached static files created by compressor
+CACHE
+
+# IntelliJ project files
+.idea
+
+# Vagrant log file
+*.log
+
+# py.test cache
+.cache
+
+# Environments
+.env
+.env3
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# auto-generated Sphinx documentation
+django/oda/apps/odaweb/static/doc
+!django/oda/apps/odaweb/static/doc/html/index.html

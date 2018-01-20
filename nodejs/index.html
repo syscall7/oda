@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Socket.IO Chat Example</title>
+
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-2.1.1.js"></script>
+    <script>
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        $(document).ready(function(){
+            var socket = io();
+            $('#username').val($('#username').val() + getRandomInt(1, 1000));
+
+            $('#connect').click(function(){
+                console.log('subscribe');
+                username = $('#username').val();
+                socket.emit('subscribe',{
+                    username: username,
+                    room: $('#room').val()
+                });
+            });
+
+            var offset = 4220736;
+            $('#move').click(function(){
+                offset += 1000;
+                socket.emit('cursor.change', {
+                    username: username,
+                    offset: offset
+                });
+            });
+
+            $('#commentBtn').click(function(){
+                var commentText = $("#commentText").val();
+                var commentOffset = $("#commentOffset").val();
+                socket.emit('comment.create', {
+                    text: commentText,
+                    offset: commentOffset
+                });
+            });
+
+            socket.on('event', function(data){
+                console.log('event', data);
+                $('#events').prepend('<p>' + 'event' + ': ' + JSON.stringify(data) + '</p>')
+            });
+        });
+
+    </script>
+
+</head>
+
+<body>
+
+<h1>Connect to ODA</h1>
+<input type="text" value="davis" id="username"/>
+<input type="text" value="mkdir" id="room"/>
+<input type="button" value="Connect" id="connect" />
+
+<br />
+
+<input type="button" id="move" value="move" /><br/>
+
+<input type="text" value="Comment Text" id="commentText"/>
+<input type="text" value="4220736" id="commentOffset"/>
+<input type="button" value="Comment" id="commentBtn" />
+
+<div id="events">
+
+</div>
+
+</body>
+</html>
+
+
+

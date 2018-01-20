@@ -1,0 +1,105 @@
+<div class="container">
+<div class="row">&nbsp;</div>
+<div class="row">&nbsp;</div>
+<div class="row">
+    <div class="span9 file-info-group">
+        <table class="file-info-table">
+            <tr>
+                <td class="file-info-label">Project:</td>
+                <td>{{ project_name }}</td>
+            </tr>
+            <tr>
+                <td class="file-info-label">File:</td>
+                <td>{{ binary.name }}</td>
+            </tr>
+            <tr>
+                <td class="file-info-label">Format:</td>
+                <td>
+                    {% for desc in binary.desc %}
+                        {% if forloop.first %}
+                            {{ desc }}
+                            <ul>
+                        {% else %}
+                            <li>{{ desc }}</li>
+                        {% endif %}
+
+                        {% if forloop.last %}
+                            </ul>
+                        {% endif %}
+
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td class="file-info-label">Size:</td>
+                <td>{{ binary.size|filesizeformat }}</td>
+            </tr>
+            <tr>
+                <td class="file-info-label">MD5:</td>
+                <td>{{ binary.md5 }}</td>
+            </tr>
+            <tr>
+                <td class="file-info-label">SHA-1:</td>
+                <td>{{ binary.sha1 }}</td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+<div class="row"><div class="span9">&nbsp;</div></div>
+
+<!--
+data-content="Lookup in the <a href='http://www.team-cymru.org/Services/MHR/'>Malware Hash Registry</a>">
+-->
+<div class="row">
+
+    <div class="span3 file-info-group">
+        <table class="file-info-table">
+            <tr><td id="known-malware"
+                    class="file-info-label"
+                    data-placement="right"
+                    data-title="Malware Lookup"
+                    data-html="true"
+                    data-trigger="hover"
+                    data-delay='{"show":100,"hide":2000}'
+                    data-content="If 'yes', this binary is known malware based on Cymru's <a href='http://www.team-cymru.org/Services/MHR/'>Malware Hash Registry</a>.  If 'no', it might still be malware.  Good luck determining that on your own!">
+                Known Malware: {{ malware|yesno }}
+            </td></tr>
+            <tr><td id="known-benign"
+                    class="file-info-label"
+                    data-placement="right"
+                    data-title="Benign Lookup"
+                    data-html="true"
+                    data-trigger="hover"
+                    data-delay='{"show":100,"hide":2000}'
+                    data-content="If 'yes', this binary is known to be harmless based on the <a href='http://www.nsrl.nist.gov/'>National Software Reference Library</a>.  If 'no', it still might be harmless.  Good luck determining that on your own!">
+                    Known Benign: {{ benign|yesno }}
+            </td></tr>
+        </table>
+    </div>
+
+    <!--
+    <div class="span6 file-info-group">
+        <table class="file-info-table">
+            <tr>
+                <td class="file-info-label">Dependencies:</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="file-info-label">Number of Imports:</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="file-info-label">Number of Exports:</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="file-info-label">Debug Present:</td>
+                <td></td>
+            </tr>
+        <br>
+    </div>
+    -->
+</div>
+</div>

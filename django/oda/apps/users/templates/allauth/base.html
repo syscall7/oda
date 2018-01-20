@@ -1,0 +1,79 @@
+{% load static from staticfiles %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block head_title %}{% endblock %}</title>
+    {% block extra_head %}
+    {% endblock %}
+
+    <script type="text/javascript" src="{% static 'scripts/lib/jquery/jquery-1.11.1.min.js' %}"></script>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'scripts/lib/bootstrap-3.2/css/bootstrap.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'scripts/lib/bootstrap-3.2/css/bootstrap-theme.css' %}"/>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'scripts/lib/toastr/toastr.css' %}"/>
+    <script type="text/javascript" src="{% static 'scripts/lib/toastr/toastr.js' %}"></script>
+
+    <style type="text/css">
+        body {
+
+          padding-bottom: 40px;
+          background-color: #eee;
+        }
+
+        .form-signin {
+          max-width: 430px;
+          padding: 15px;
+          margin: 0 auto;
+        }
+        .form-signin .form-signin-heading,
+        .form-signin .checkbox {
+          margin-bottom: 10px;
+        }
+        .form-signin .checkbox {
+          font-weight: normal;
+        }
+        .form-signin .form-control {
+          position: relative;
+          height: auto;
+          -webkit-box-sizing: border-box;
+             -moz-box-sizing: border-box;
+                  box-sizing: border-box;
+          padding: 10px;
+          font-size: 16px;
+        }
+        .form-signin .form-control:focus {
+          z-index: 2;
+        }
+        .form-signin input[type="email"] {
+          margin-bottom: -1px;
+          border-bottom-right-radius: 0;
+          border-bottom-left-radius: 0;
+        }
+        .btn-submit {
+          margin-top: 10px;
+/*          border-top-left-radius: 0;
+          border-top-right-radius: 0; */
+        }
+    </style>
+</head>
+<body>
+
+{% block body %}
+
+    <div style="padding:10px 0px 0px 10px;"><a href="/"><img src="{% static 'images/oda.png' %}" style="height:50px;" /></a></div>
+    <div class="container">
+
+      {% block content %}
+      {% endblock %}
+
+    </div> <!-- /container -->
+
+{% endblock %}
+
+{% block extra_body %}
+{% endblock %}
+
+</body>
+</html>

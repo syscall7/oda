@@ -1,0 +1,8 @@
+{% load staticfiles %}
+
+<div id="popover-inst-doc" class=hide>
+    <div id="inst-doc-content" style="text-align: center;">
+        <h1>Loading...</h1>
+        <img src="{% static 'images/32.gif' %}" />
+    </div>
+</div>

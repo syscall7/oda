@@ -1,0 +1,523 @@
+    body {
+        margin: 0px;
+    }
+    #editor {
+        width:100%;
+    }
+    .theeditor {
+        position: absolute;
+        top: 110px;
+        right: 0;
+        bottom: 20px;
+        left: 0;
+    }
+
+    .ace_gutter-cell {
+        text-align:left;
+        color: #093C83;
+    }
+
+    /* font for the branch lines */
+    @font-face {
+        font-family: 'DejaVuSansMono';
+
+        /* EOT file for old IE */
+        src: url('../fonts/DejaVuSansMono.eot');
+
+        /* TTF file for CSS3 browsers */
+        src: url('../fonts/DejaVuSansMono.ttf') format('truetype');
+    }
+
+    .cell-branch {
+        color: #093C83;
+        background-color: #ebebeb;
+        font-family:DejaVuSansMono;
+        text-align: right;
+
+        /*width:49px; */
+        /*display:inline-block; */
+        overflow: hidden;
+    }
+
+    .raw {
+        color: gray;
+    }
+
+    .instruction {
+        color: #093C83;
+    }
+
+    .comment {
+        color: #009933;
+        white-space: nowrap;
+    }
+
+    .function-return {
+        font-style: italic;
+    }
+
+    .function-name {
+        font-weight: bold;
+    }
+
+/** STATUS BAR CONTROLS **/
+     #messages-container {
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        right: 0;
+        bottom: 20px;
+        height: 200px;
+        width: 300px;
+        background-color:#c0c0c0;
+         padding:8px;
+         overflow:hidden;
+     }
+     a.oda_error-indicator {
+         color:red;
+     }
+
+     #statusBar {
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 20px;
+        background-color: rgb(245, 245, 245);
+        color: gray;
+        font-family: "Courier New",Courier,monospace;
+    }
+     .oda_loading-indicator-box {
+         display: inline-block;
+         position: absolute;
+         right: 90px;
+         padding-left:10px;
+         border-left: 1px solid;
+         height:20px;
+         overflow: hidden;
+         width:30px;
+     }
+
+     .oda_status-name-box {
+         display: inline-block;
+         position: absolute;
+         right: 170px;
+         padding-left:10px;
+         border-left: 1px solid;
+         height:20px;
+         overflow: hidden;
+         text-align: right;
+     }
+
+      .oda_loading-error-box {
+         display: inline-block;
+         position: absolute;
+         right: 130px;
+         padding-left:10px;
+         border-left: 1px solid;
+         height:20px;
+         overflow: hidden;
+         width:30px;
+     }
+
+    .ace_status-indicator {
+        color: gray;
+        position: absolute;
+        right: 0;
+        border-left: 1px solid;
+        width:80px;
+        display: inline-block;
+        text-align: right;
+    }
+
+    /** End status bar **/
+
+    /** Tab Modifications **/
+
+    .oda-nav > li > a {
+        /* padding: 1px 15px; */
+        line-height: 1;
+    }
+    .oda-nav {
+        /*
+        background-color: #def;
+        border-bottom: 2px solid #888;
+        */
+        margin-bottom: 10px;
+        margin-top: 10px;
+        margin-left: 10px;
+    }
+
+    .navbar-brand {
+        background: url('/static/images/oda.png') no-repeat center;
+        background-size: 50px;
+        width: 70px;
+    }
+
+.sections-table
+{
+    margin-left: 20px;
+}
+
+.sections-table td, .sections-table th
+{
+    padding:3px 10px 3px 10px;
+}
+
+.sections-table th
+{
+    background-color:#92C1F0;
+    color:#000000;
+}
+
+.sections-table tr.even td
+{
+    color:#000000;
+}
+
+.sections-table tr.odd td
+{
+    color:#000000;
+    background-color:#C8DEFF;
+}
+
+.file-info-table {
+    font-family: monospace;
+    font-size: 14px;
+    line-height: 14px;
+    color: dimgrey;
+}
+
+.file-info-label {
+    vertical-align: top;
+    color: #093C83;
+}
+
+.file-info-group
+{
+    border:1px solid #ddd; /*#BDBEDF;*/
+    padding: 10px 10px 10px 10px;
+    border-radius: 4px;
+}
+
+
+.clickable {
+    color: #0088CC;
+    text-decoration: none;
+}
+.clickable:hover {
+    color: #005580;
+    text-decoration: underline;
+    cursor:pointer;
+}
+
+.share-btn .popover {
+    width:350px;
+}
+
+/* panes */
+
+    .oda-paneselector .pulse-info a i {
+  -webkit-animation-name: pulse-info;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: ease-in-out;
+  -webkit-animation-direction: alternate;
+  -moz-animation-name: pulse-info;
+  -moz-animation-duration: 2s;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-timing-function: ease-in-out;
+  -moz-animation-direction: alternate;
+}
+.oda-paneselector {
+  background: whiteSmoke;
+  text-align: center;
+  overflow: visible;
+}
+.oda-paneselector ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.oda-paneselector ul li {
+  text-align: center;
+  font-size: 16px;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+.oda-paneselector ul li a {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  vertical-align: center;
+  color: #999;
+  text-decoration: none;
+  font-size: 20px;
+  padding: 0;
+}
+.oda-paneselector ul li:hover a {
+  color: #005580;
+  background-color: #EEE;
+}
+.oda-paneselector ul li.active a {
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
+  background-color: #005ce6;
+  color: white;
+}
+.oda-paneselector ul li {
+    cursor: pointer;
+}
+
+/*Nprogress Bar*/
+#nprogress .bar,
+#nprogress .spinner {
+    z-index: 999999;
+    }
+
+/*Spinner*/
+.loading-spinner {
+    position: relative;
+    font-size: 100px;
+    width: 1em;
+    height: 1em;
+    margin: 100px auto;
+    border-radius: 50%;
+    background: #123456;
+    box-shadow: inset 0 0 0 .12em rgba(0,0,0,0.2), 0 0 0 .12em rgba(255,255,255,0.1);
+    background:
+        -webkit-linear-gradient(#005ce6 50%, #C0C0C0 50%),
+        -webkit-linear-gradient(#C0C0C0 50%, #005ce6 50%);
+    background:
+        -webkit-linear-gradient(#005ce6 50%, #C0C0C0 50%), -webkit-linear-gradient(#C0C0C0 50%, #005ce6 50%);
+    background:
+        linear-gradient(#005ce6 50%, #C0C0C0 50%),
+        linear-gradient(#C0C0C0 50%, #005ce6 50%);
+    background-size: 50% 100%, 50% 100%;
+    background-position: 0 0, 100% 0;
+    background-repeat: no-repeat;
+    opacity: 0.7;
+    -webkit-animation: mask 3s infinite alternate;
+    animation: mask 3s infinite alternate;
+}
+
+.loading-spinner:after {
+    content: "";
+    position: absolute;
+    border: .12em solid rgba(255,255,255,0.3);
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    width: 50%;
+    height: 50%;
+    border-radius: inherit;
+}
+
+
+.xref-location {
+   /* http://stackoverflow.com/questions/20376008/how-to-underline-text-and-change-mouse-cursor-to-pointer-in-ace-editor */
+   /* border-bottom: 1px solid black; */
+    font-weight: bold;
+   position: absolute;
+   cursor: pointer !important;
+   pointer-events: auto;
+}
+
+
+@-webkit-keyframes mask {
+    0% { }
+    25%  { -webkit-transform: rotate(270deg); }
+    50%  { -webkit-transform: rotate( 90deg); }
+    75%  { -webkit-transform: rotate(360deg); }
+    100% { -webkit-transform: rotate(180deg); }
+}
+
+@keyframes mask {
+    0% { }
+    25%  { -webkit-transform: rotate(270deg); transform: rotate(270deg); }
+    50%  { -webkit-transform: rotate( 90deg); transform: rotate( 90deg); }
+    75%  { -webkit-transform: rotate(360deg); transform: rotate(360deg); }
+    100% { -webkit-transform: rotate(180deg); transform: rotate(180deg); }
+}
+
+/* end spinner */
+
+.user-actions a {
+    padding-left: 10px;
+}
+
+.shortcut-text {
+    width:145px;
+    display:inline-block;
+}
+
+.shortcut-text-disabled {
+    color:#e1e1e8;
+}
+
+.shortcut-key {
+    margin-left:8px;
+    padding:2px 8px 2px 8px;
+    background: -moz-linear-gradient(-90deg, white 0%, #e3e3e3 100%) repeat scroll 0 0 white;
+    border: 1px solid #aaa;
+    border-radius: 3px;
+}
+
+/** Hex units **/
+#hex-dump-table {
+    font-family: monospace;
+    cursor: text;
+}
+
+#hex-dump-table .row_even {
+
+}
+
+#hex-dump-table .row_odd {
+    /* background:#BEDEFF; */
+}
+
+.hex-cell-sec {
+    text-align: right;
+    color: #808080;
+}
+
+.hex-cell-addr {
+    padding: 0px 0px 0px 0px;
+}
+
+.hex-cell-byte {
+    color: #093C83;
+    padding: 0px 2px 0px 2px;
+    border: 1px;
+}
+
+.hex-cell-byte:hover {
+   background-color: #CCCCCC;
+}
+
+.hex-cell-gap {
+    padding: 0px 5px 0px 5px;
+}
+
+.hex-cell-asc {
+    color: gray;
+    padding: 0px 0px 0px 0px;
+}
+
+.hex-hovered {
+    background-color: #CCCCCC;
+}
+
+/* style for the title in the sidebar panel */
+.oda-sidebar-title {
+    font-size: 16px;
+    font-weight: bold;
+    border-bottom: 2px solid #ddd;
+    margin-bottom: 10px;
+}
+
+/* force to white background instead of alternating shades */
+.slick-row.even,
+.slick-row.odd {
+    background: white;
+}
+
+
+
+
+/* Grid */
+
+.slick-row.active .slick-cell {
+    background-color: #FFB;
+}
+
+.cell-story {
+    white-space: normal !important;
+    line-height: 19px !important;
+}
+
+.loading-indicator {
+    display: inline-block;
+    padding: 12px;
+    background: white;
+    -opacity: 0.5;
+    color: black;
+    font-weight: bold;
+    z-index: 9999;
+    border: 1px solid red;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-box-shadow: 0 0 5px red;
+    -webkit-box-shadow: 0px 0px 5px red;
+    -text-shadow: 1px 1px 1px white;
+}
+
+.slick-row {
+    position: absolute;
+    background: white;
+    border: 0px;
+    line-height: 15px;
+}
+
+.loading-indicator label {
+    padding-left: 20px;
+    background: url('../images/ajax-loader-small.gif') no-repeat center left;
+}
+
+.cell-section {
+    text-align: right;
+    padding-right: 0px;
+}
+
+.cell-offset {
+    padding-left: 0px;
+}
+
+.cell-rawbytes {
+    color: gray;
+}
+
+.xref-location {
+    /* http://stackoverflow.com/questions/20376008/how-to-underline-text-and-change-mouse-cursor-to-pointer-in-ace-editor */
+    /* border-bottom: 1px solid black; */
+    font-weight: bold;
+    cursor: pointer;
+    padding-left: 8px;
+    color: #08c;
+}
+.xref-location:hover {
+    /* http://stackoverflow.com/questions/20376008/how-to-underline-text-and-change-mouse-cursor-to-pointer-in-ace-editor */
+    /* border-bottom: 1px solid black; */
+    color:#005580;
+    text-decoration: underline;
+}
+
+.live-input {
+    border: none;
+    font-family: "Monaco", "Menlo", "Ubuntu Mono", "Consolas", "source-code-pro", monospace;
+    font-size: 14px;
+}
+
+.insn {
+    color: #093c83;
+}
+
+/** Graph **/
+.graph-node {
+    color: black;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+}
+
+.graph-node td {
+    padding-left: 5px;
+    text-align: left;
+}
+
+.graph-active {
+    background-color: #FFB;
+}
+}

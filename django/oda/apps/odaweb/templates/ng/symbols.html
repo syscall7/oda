@@ -1,0 +1,42 @@
+{% verbatim %}
+
+<script type="text/ng-template" id="symbols.html">
+
+<div ng-controller="SymbolsController">
+    <div id="sidebar-label-symbols" class="oda-sidebar-title">Symbols</div>
+    <div class="input-group">
+        <span class="input-group-addon">Filter</span>
+        <input type="text" class="form-control" placeholder="Substring" ng-model="search.name">
+    </div>
+    <div class="sidebar-scroll-container">
+        <table class="table table-striped sidebar-table table-condensed" id="symbol-table">
+            <thead>
+                <tr>
+                    <th class="col-sm-4" style="width:1%">Address</th>
+                    <th class="col-sm-4" style="width:1%">Type</th>
+                    <th class="col-sm-4" style="width:100%; text-align: left;">Name</th>
+                </tr>
+            </thead>
+            <tbody class="scrollContent">
+                <tr ng-repeat="symbol in symbols | filter:search | orderBy:'offset'">
+                    <td style="width:1%">0x{{symbol.offset.toString(16)}}</td>
+                    <td style="width:1%">{{symbol.type}}</td>
+                    <td style="width:100%; text-align: left;" ng-switch
+                        on="symbol.offset">
+                        <span ng-switch-when="0">{{ symbol.name }}</span>
+                        <span ng-switch-default class="clickable"
+                              ng-click="setPosition(symbol.offset)">{{symbol.name}}</span>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div ng-show="!symbols">
+        <em>No symbols availables</em>
+        </div>
+    </div>
+</div>
+
+</script>
+{% endverbatim %}

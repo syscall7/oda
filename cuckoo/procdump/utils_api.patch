@@ -1,0 +1,68 @@
+diff --git a/utils/api.py b/utils/api.py
+index f084f28..e2c2dee 100755
+--- a/utils/api.py
++++ b/utils/api.py
+@@ -9,6 +9,7 @@ import json
+ import argparse
+ import tarfile
+ import socket
++import glob
+ from StringIO import StringIO
+ from zipfile import ZipFile, ZIP_STORED
+ 
+@@ -146,6 +147,17 @@ def tasks_list(limit=None, offset=None):
+ 
+     return jsonize(response)
+ 
++def get_status_msg(task_id):
++    # hardcode path for now
++    log_path = '/home/anthony/cuckoo/storage/analyses/%s/analysis.log' % task_id
++    try:
++        with open(log_path,'rb') as f:
++            msg = f.readlines()[-1]
++    except Exception:
++        # default message to relay until more is available
++        msg = 'Provisioning resources'
++    return msg
++
+ @route("/tasks/view/<task_id>", method="GET")
+ def tasks_view(task_id):
+     response = {}
+@@ -161,6 +173,8 @@ def tasks_view(task_id):
+         for error in task.errors:
+             entry["errors"].append(error.message)
+ 
++        entry["msg"] = get_status_msg(task_id)
++
+         response["task"] = entry
+     else:
+         return HTTPError(404, "Task not found")
+@@ -368,6 +382,28 @@ def task_screenshots(task=0, screenshot=None):
+     else:
+         return HTTPError(404, folder_path)
+ 
++#@route("/memory/get/<task:int>/<pid>", method="GET")
++@route("/memory/get/<task:int>", method="GET")
++def memorydumps_get(task=0, pid=None):
++    folder_path = os.path.join(CUCKOO_ROOT, "storage", "analyses", str(task), "memory")
++
++    # for now, assume there is only one pid
++    pid = glob.glob(folder_path + '/*.dmp')[0].replace('.dmp', '')
++
++    if os.path.exists(folder_path):
++        if pid:
++            pid_name = "{0}.dmp".format(pid)
++            pid_path = os.path.join(folder_path, pid_name)
++            if os.path.exists(pid_path):
++                response.content_type = "application/octet-stream"
++                return open(pid_path, "rb").read()
++            else:
++                return HTTPError(404, pid_path)
++        else:
++            return HTTPError(404, folder_path)
++    else:
++        return HTTPError(404, folder_path)
++
+ if __name__ == "__main__":
+     parser = argparse.ArgumentParser()
+     parser.add_argument("-H", "--host", help="Host to bind the API server on", default="localhost", action="store", required=False)

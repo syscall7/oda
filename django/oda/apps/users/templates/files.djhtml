@@ -1,0 +1,99 @@
+{% extends "layout-ace.djhtml" %}
+
+{% block head %}
+
+    <style type="text/css">
+
+        .file-list .details {
+            background: none repeat scroll 0 0 #3A576F;
+            color: #CCC;
+            padding: 8px;
+        }
+
+        .file-list h3 {
+            margin-bottom: 0px;
+        }
+
+    </style>
+
+    <script type="text/javascript">
+        var odaUserApplication = angular
+        .module('odaUserApplication',['ngSanitize', 'ui.bootstrap', 'ui.keypress'])
+        .config(function($httpProvider) {
+
+            $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+            $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+        });
+
+        odaUserApplication.controller('FilesController', function FilesController($scope, $http){
+            $scope.deleteFile = function(id) {
+                $http.delete('/odaweb/api/masters/' + id).success(function(){
+                    window.location.reload();
+                });
+            }
+        });
+
+        angular.element(document).ready(function() {
+            angular.bootstrap(document, ['odaUserApplication']);
+        });
+    </script>
+
+{% endblock %}
+
+{% block body %}
+    <nav role="navigation" class="navbar navbar-default navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse"
+                        class="navbar-toggle collapsed" type="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="/" class="navbar-brand"></a>
+            </div>
+            <div class="navbar-collapse collapse" id="navbar">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Files</a></li>
+                    <li><a href="/">ODA</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/user/files">{{ user.username }}</a></li>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </nav>
+
+    <div class="container" ng-controller="FilesController">
+        <div class="row">
+            <div class="col-md-4">
+                <h2>{{ user.username }} Files ({{ masters|length }})</h2>
+            </div>
+            <div class="col-md-8">
+                <ul class="unstyled file-list">
+                    {% for master in masters %}
+                        <li class="item">
+                            <h3>
+                                <a href="{% url 'index' master.short_name  master.latest_revision %}">{{ master.project_name }}</a>
+                                {% if master.latest_revision > 0 %}
+                                    <small>{{ master.latest_revision }} revisions</small>
+                                {% endif %}
+                            </h3>
+                            <p class="details">
+                                {{ master.creation_date|date:"SHORT_DATE_FORMAT" }} {{ master.details }}
+                            </p>
+                            <button type="button" class="btn btn-danger btn-sm" ng-click="deleteFile({{ master.id }})" >
+                                Delete <i class="fa fa-trash-o fa-1"></i>
+                            </button>
+
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

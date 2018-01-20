@@ -1,0 +1,761 @@
+{% extends "layout-ace.djhtml" %}
+
+{% load staticfiles %}
+{% load tags %}
+
+{% block body %}
+
+<div ng-include="'navbar.html'"></div>
+
+<div>
+    <div id="slider" style="margin-top:50px; margin-bottom: 0px; margin-left: 10px; margin-right: 10px; border: 0px; clear:both;">
+        <canvas id="addr-bar-canvas">You need to upgrade your browser or enable javascript to view this site!</canvas>
+    </div>
+</div>
+
+<div class="loading-spinner"></div>
+
+<div class="theeditor" style="display:none;">
+
+<div class="ui-layout-center">
+    <div class="ui-layout-west" style="padding:10px;"
+            ng-controller="DockController">
+
+        <div ng-repeat="dock in Docker.docks"
+             ng-show="isActive(dock)"
+             ng-include="dock.template">
+
+        </div>
+
+
+    </div>
+
+    <div class="ui-layout-center">
+        <div class="disassembly-loading"
+             style="position:absolute; z-index: 9; right:30px; top:10px; font-family: Monaco, Menlo, Consolas, 'Courier New', monospace;">
+            <img src="{% static 'images/712.gif' %}" style="width:32; height:32px;"/>
+        </div>
+        <!-- Nav tabs -->
+        <ul class="nav nav-pills oda-nav" id="oda-tabs" role="tablist">
+          <li class="active"><a href="#tab-disassembly" role="tab" data-toggle="tab">Disassembly</a></li>
+          <li><a href="#tab-graph" role="tab" data-toggle="tab">Graph</a></li>
+          <li><a href="#tab-hex" role="tab" data-toggle="tab">Hex</a></li>
+          <li><a href="#sections" role="tab" data-toggle="tab">Sections</a></li>
+          <li><a href="#tab-fileinfo" role="tab" data-toggle="tab">File Info</a></li>
+          <!-- Disable runtime report for now
+          <li><a href="#tab-runtime" role="tab" data-toggle="tab">Runtime Report</a></li>
+          -->
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div class="tab-pane active" id="tab-disassembly">
+              <div id="editor"></div>
+          </div>
+          <div class="tab-pane" id="sections">
+              <div ng-include src="'sections.html'"></div>
+          </div>
+          <div class="tab-pane" id="tab-fileinfo">
+            {% include "tab_fileinfo.djhtml" %}
+          </div>
+          <div class="tab-pane" id="tab-hex">
+            <div ng-include src="'hex.html'"></div>
+          </div>
+          <div class="tab-pane" id="tab-runtime">
+              <div ng-include src="'runtime.html'"></div>
+          </div>
+          <div class="tab-pane" id="tab-graph">
+              <div class="graph-view"></div>
+          </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="ui-layout-east">
+<div id="decompiler-window"></div>
+</div>
+
+{%  if not binary.is_live_mode %}
+<div class="ui-layout-west oda-paneselector blue" ng-controller="DockMenuController">
+    <ul>
+        <li ng-repeat="dock in Docker.docks"
+            ng-class="{active:isActive(dock)}"
+            ng-click="Docker.select(dock)">
+            <a><i class="fa fa-3" ng-class="dock.icon"></i></a>
+        </li>
+    </ul>
+</div>
+{% endif %}
+
+</div>
+<div id="statusbar-container">
+    <div id="statusBar">
+        <span class="status-mode">online disassembler forever!</span>
+        <div class="oda_loading-indicator-box">
+            <i class="fa fa-cloud-download fa-lg oda_loading-indicator" style="display: none;"></i>
+        </div>
+        <div class="oda_loading-error-box">
+            <a href="" class="oda_error-indicator" style="display:none;"><i class="fa fa-exclamation-triangle fa-lg"></i></a>
+        </div>
+        <div class="oda_status-name-box">
+
+        </div>
+        <div class="ace_status-indicator">0:0</div>
+    </div>
+    <div id="messages-container" style="display: none;">
+        <h4>Messages</h4>
+        <div class="oda-error-messages"></div>
+    </div>
+</div>
+
+{% include 'ng/navbar.html' %}
+{% include 'ng/sections.html' %}
+{% include 'ng/symbols.html' %}
+{% include 'ng/strings.html' %}
+{% include 'ng/find_results.html' %}
+{% include 'ng/live_entry.html' %}
+{% include 'handlebars.djhtml' %}
+
+
+
+{% verbatim %}
+<script type="text/ng-template" id="commentModal.html">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Comment Dialog</h4>
+    </div>
+    <div class="modal-body">
+
+          <p class="commentLine" ng-bind-html="line.line.row"></p>
+          <input class="comment-text" type="text"
+                 style="width:500px;"
+                 ng-model="comment.text"
+                 focus-on="comment"
+                 ui-keyup="{'enter':'save()'}"
+          />
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="save()">Save</button>
+        <button class="btn btn-warning" ng-click="cancel()">Close</button>
+    </div>
+
+</script>
+
+<script type="text/ng-template" id="configureFileModal.html">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="cancel()">&times;</button>
+        <h3>Disassembly Options</h3>
+    </div>
+    <div class="modal-body">
+
+        <div class="alert alert-success">
+            We have detected the object file format as {{ fileData.target }}:
+            <ul>
+                <li ng-repeat="f in data.fileData.file_format">{{ f }}</li>
+            </ul>
+            <br>
+            Please select from the platform options below:
+        </div>
+
+        <div class="alert alert-info" ng-show="runtimeSupported()">
+            <div class="checkbox">
+                <label>
+                  <input type="checkbox" ng-model="data.sandbox">Run Live in a Sandbox and Memory Dump
+                </label>
+            </div>
+        </div>
+
+        <!-- <div class="live-mode-platform-options-form" ng-include src="optionsTemplate()"> -->
+        <div ng-include src="'new_options_template.html'">
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <div ng-show="loading" style="text-align:left">
+            <div style="width:106px; height:94px; display:inline-block">
+                <img src="/static/images/oda.png" style="position:absolute; z-image:0;"/>
+                <img src="/static/images/oda.gif" style="position:absolute; z-image:1;"/>
+            </div>
+            <span class="text-success" style="vertical-align:middle">Woot!  Please wait while we process this file...</span>
+        </div>
+        <div ng-hide="loading">
+            <button class="btn btn-primary" ng-disabled="options.architecture == 'UNKNOWN!' || loading" ng-click="ok()">OK</button>
+            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="monitorSandbox.html">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="cancel()">&times;</button>
+        <h3>Sandbox and Memory Dump</h3>
+    </div>
+    <div class="modal-body">
+
+        <p><strong>Status:</strong> {{ job_status.status || "provisioning"}}</p>
+        <p><strong>Elapsed Time:</strong> {{ elapsedSeconds | date:'mm:ss' }}</p>
+        <pre>{{ job_status.msg }}</pre>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-disabled="!jobDone()" ng-click="continue()">continue</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="binaryFileModal.html">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="cancel()">&times;</button>
+        <h3>Entry Point Not Found</h3>
+    </div>
+    <div class="modal-body">
+        <p>We cannot identify the entry point of the executable image you have uploaded.  Would you like to start disassembling at the beginning of the file?</p>
+        <div class="alert alert-info" role="alert">NOTE: If you choose "No", you can still interactively convert the data to code later by right-clicking on the desired offset and selecting "Data->Code"</div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-disabled="uploadForm.$invalid || loading" ng-click="ok()">Yes</button>
+        <button class="btn btn-warning" ng-click="cancel()">No</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="uploadFileModal.html">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="cancel()">&times;</button>
+        <h3>Open File</h3>
+    </div>
+    <div class="modal-body">
+        <form  name="uploadForm" ng-show="!loading" id="upload-form" class="form-horizontal"
+              enctype="multipart/form-data"
+              action="_upload" method="post">
+
+            {% endverbatim %}
+            {% csrf_token %}
+            {% verbatim %}
+
+            <div ng-show="error" class="alert alert-danger" role="alert">{{ error }}</div>
+
+           <div class="form-group">
+                <label for="filename" class="col-sm-4 control-label">File</label>
+                <div class="col-sm-8">
+                    <!--<input id="filename" type="text" class="input-medium disabled" name="filename" readonly>-->
+                    <input class="form-control" type="file" id="file"
+                           file-model="uploadFile"
+                           required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="project_name" class="col-sm-4 control-label">Project Name</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control"
+                           ng-model="data.projectName"
+                            placeholder="Project Name" required/>
+                </div>
+            </div>
+
+        </form>
+
+        <div ng-show="loading">
+            <div style="width:106px; height:94px; display:inline-block">
+                <img src="/static/images/oda.png" style="position:absolute; z-image:0;"/>
+                <img src="/static/images/oda.gif" style="position:absolute; z-image:1;"/>
+            </div>
+            <span class="text-info" style="vertical-align:middle">Loading ...</span>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-disabled="uploadForm.$invalid || loading" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="gotoAddressModal.html">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="cancel()">&times;</button>
+        <h3>Goto Address</h3>
+    </div>
+    <div class="modal-body">
+
+        <form class="form-horizontal">
+
+
+            <div class="form-group">
+                <label for="project_name" class="col-sm-4 control-label">Address:</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control"
+                           ng-model="data.address"
+                            placeholder="0x00000000"
+                            id="goto-textbox"
+                            ui-keyup="{'enter':'ok()'}"
+                            focus-on="goto"/>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="shareLive.html">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="cancel()">&times;</button>
+        <h3>Share Session Live</h3>
+    </div>
+    <div class="modal-body">
+        <p>Share this URL for live connections</p>
+        <pre>{{ shareUrl() }}</pre>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="makeFunction.html">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="cancel()">&times;</button>
+        <h3 ng-if="data.modify">Edit Function at 0x{{ data.offsetHex }}</h3>
+        <h3 ng-if="!data.modify">Create Function at 0x{{ data.offsetHex }}</h3>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label for="name">Function Name:</label>
+            <input type="text" class="form-control" ng-model="data.function.name" />
+        </div>
+
+        <div class="form-group">
+            <label for="name">Function Return Value:</label>
+            <input type="text" class="form-control" ng-model="data.function.retval" />
+        </div>
+
+        <div class="form-group">
+            <label for="name">Function Arguments:</label>
+            <input type="text" class="form-control" ng-model="data.function.args" />
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+
+
+<script type="text/ng-template" id="makeStructType.html">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="cancel()">&times;</button>
+        <h3>Create Struct Type</h3>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label for="name">Structure Name:</label>
+            <input type="text" class="form-control" ng-model="data.structData.name" />
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="makeStructVariable.html">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="cancel()">&times;</button>
+        <h3>Create Struct Variable</h3>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <table class="table table-striped sidebar-table table-condensed" id="struct-variable-table">
+                <tbody class="scrollContent">
+                    <tr>
+                        <td class="string" style="text-align: left; width:50%">Variable Name</td>
+                        <td class="str-offset" style="text-align: left; width:50%">
+                            <input type="text" class="form-control" ng-model="data.structData.name" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="string" style="text-align: left; width:50%">Variable Type</td>
+                        <td class="string" style="text-align: left; width:50%">
+                            <select class="form-control" id="struct-var-select-field-type" ng-model="data.structData.type" name="select-structvar-type">
+                                <option ng-repeat="t in data.structData.types">{{t.name}}</option>
+                            </select>
+                        </td>
+                    </tr>
+               </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="runtime.html">
+<div ng-controller="RuntimeDumpController">
+    <div ng-show="!results">
+       <p>The runtime report is not available for this file.
+    </div>
+
+    <div ng-hide="!results">
+        <section id="info">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Started On</th>
+                            <th>Completed On</th>
+                            <th>Duration</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{results.info.category|uppercase}}</td>
+                            <td>{{results.info.started}}</td>
+                            <td>{{results.info.ended}}</td>
+                            <td>{{results.info.duration}} seconds</td>
+                        </tr>
+                    </tbody>
+                </table>
+        </section>
+
+        <section id="machine">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Machine</th>
+                    <th>Label</th>
+                    <th>Manager</th>
+                    <th>Started On</th>
+                    <th>Shutdown On</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{results.info.machine.name}}</td>
+                    <td>{{results.info.machine.label}}</td>
+                    <td>{{results.info.machine.manager}}</td>
+                    <td>{{results.info.machine.started_on}}</td>
+                    <td>{{results.info.machine.shutdown_on}}</td>
+                </tr>
+            </tbody>
+        </table>
+        </section>
+
+        <div class="well well-small">
+            <b>Files</b>
+            <li ng-repeat="file in results.behavior.summary['files']">
+                <span class="mono">{{file}}</span>
+            </li>
+            <div ng-show="!results.behavior.summary['files'].length">
+                <em>No files found</em>
+            </div>
+        </div>
+
+        <div class="well well-small">
+            <b>Registry Keys</b>
+            <li ng-repeat="key in results.behavior.summary['keys']">
+                <span class="mono">{{key}}</span>
+            </li>
+            <div ng-show="!results.behavior.summary['keys'].length">
+                <em>No registry keys found</em>
+            </div>
+        </div>
+
+        <div class="well well-small">
+            <b>Mutexes</b>
+            <li ng-repeat="key in results.behavior.summary['mutexes']">
+                <span class="mono">{{key}}</span>
+            </li>
+            <div ng-show="!results.behavior.summary['mutexes'].length">
+                <em>No mutexes found</em>
+            </div>
+        </div>
+    </div>
+</div>
+</script>
+
+
+<script type="text/ng-template" id="hex.html">
+
+    <div id="hex-scroll" ng-controller="HexController">
+    <div ng-show="!hexLines">Loading...</div>
+    <table id="hex-dump-table">
+        <tbody>
+        <tr ng-repeat="h in hexLines" addr={{ h.addr|hex:8 }}>
+            <td class="hex-cell-sec">{{ h.name }}:</td>
+            <td class="hex-cell-addr" id="p{{ h.addr|hex:8}}" >{{ h.addr|hex:8 }}</td>
+            <td class="hex-cell-gap"></td>
+            <td class="hex-cell-byte" ng-repeat-start="byte in h.bytes track by $index" id="h{{ h.addr + $index | hex:8 }}">
+                {{ byte }}
+            </td>
+            <td class="hex-cell-gap" ng-repeat-end ng-if="$index==7 || $index==15"></td>
+            <td class="hex-cell-asc" id="a{{ h.addr + $index | hex:8 }}" ng-repeat="asc in h.asc track by $index">
+                {{ asc }}
+            </td>
+        </tr>
+    </tbody>
+    </table>
+    </div>
+
+</div>
+
+</script>
+
+
+
+
+<script type="text/ng-template" id="new_options_template.html">
+
+    <form class="form-horizontal" role="form">
+            <div class="form-group">
+            <label class="col-sm-4 control-label upload-form-control" for="select-{{ form_type }}-architecture">
+                Arch <span ng-show="options.architecture == 'UNKNOWN!'">*</span>
+            </label>
+
+            <div class="col-sm-8">
+                <select class="input-small form-control"
+                        ng-model="options.architecture"
+                        ng-options="arch for arch in architectures"
+                        ng-change="optionsUpdated()"
+                        ng-disabled="architectureLocked"
+                        >
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label upload-form-control"
+                   for="set-{{ form_type }}-base-address"
+                    >Base Address</label>
+
+            <div class="col-sm-8">
+                <div class="input-group">
+                <input id="set-{{ form_type }}-base-address" name="base_address"
+                       ng-model="options.base_address"
+                       type="text" placeholder="0x00000000"
+                       class="input-small form-control"
+                       ng-disabled="architectureLocked"
+                        >
+                <span class="input-group-addon"><a href="" ng-click="changeBaseAddress(options.base_address)">Apply</a></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label upload-form-control">Endian</label>
+
+            <div class="col-sm-8">
+                <select class="input-small form-control" name="endian"
+                        ng-model="options.endian"
+                        ng-options="e.name for e in endians track by e.name"
+                        ng-change="optionsUpdated()"
+                        >
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group" ng-repeat="po in options.platformOptions">
+            <label class="col-sm-4 control-label">{{ po.name }}</label>
+
+            <div class="col-sm-8">
+                <select class="input-small form-control"
+                        ng-model="po.selectedValue"
+                        ng-options="x for x in po.values"
+                        ng-change="optionsUpdated()"
+                        >
+                </select>
+            </div>
+        </div>
+
+    </form>
+</script>
+
+<script type="text/ng-template" id="structform.html">
+    <div  ng-controller="StructTypesController">
+        <div class="oda-sidebar-title">Structures</div>
+        <form class="form-inline" role="form">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default" ng-click="createStruct()"><i class="fa fa-plus-square fa-lg"></i></button>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">Filter</span>
+                <input type="text" class="form-control" placeholder="Substring" ng-model="search.string">
+            </div>
+
+        </form>
+        <div class="sidebar-scroll-container">
+            <table class="table table-striped sidebar-table table-condensed" id="structtypes-table">
+                <thead>
+                    <tr>
+                        <th class="col-sm-4" style="width:1%">Type</th>
+                    </tr>
+                </thead>
+                <tbody class="scrollContent">
+                        <tr ng-repeat="struct in structTypes | filter:search">
+                            <td class="clickable" style="text-align: left; width:100%" ng-click="openStructEditor(struct,$index)">{{ struct.name }}</td>
+                            <td><button type="button" class="btn btn-default btn-xs" ng-click="deleteStructType($index)">X</button></td>
+                        </tr>
+                </tbody>
+            </table>
+
+            <div ng-show="!structTypes">
+                <em>No structs found in here and why not</em>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="about.html">
+    <div  ng-controller="AboutController">
+        <div class="modal-header">
+            <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
+            <h3>About ODA</h3>
+        </div>
+        <div class="modal-body">
+            {% endverbatim %}<img src="{% static 'images/oda.png' %}" style="float:left"/>{% verbatim %}
+            <b>ODA</b> is the creation of Anthony DeRosa, Tom Keeley, and Bill Davis
+            <p></p>
+            Version: {{release_version}}<br>
+            Release Date: {{release_date}}
+        </div>
+        <div class="modal-footer">
+           <!-- <a href="#" class="btn btn-primary" data-dismiss="modal">Close</a> -->
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="whats-oda.html">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="close()" aria-hidden="true">&times;</button>
+        <h3>What's ODA?</h3>
+    </div>
+    <div class="modal-body">
+        {% endverbatim %}<img src="{% static 'images/oda.png' %}" style="float:left"/>{% verbatim %}
+        <b>ODA</b> stands for <b>O</b>nline <b>D</b>is<b>A</b>ssembler.  <b>ODA</b> is a general purpose machine code disassembler
+        that supports a myriad of machine architectures.  Built on the shoulders of libbfd and libopcodes (part of
+        binutils), <b>ODA</b> allows you to explore an executable by dissecting its sections, strings,
+        symbols, raw hex, and machine level instructions.
+
+        <p><p>You can use it for a variety of purposes such as:
+
+        <ul>
+            <li>Malware analysis</li>
+            <li>Vulnerability research</li>
+            <li>Visualizing the control flow of a group of instructions</li>
+            <li>Disassembling a few bytes of an exception handler that is going off into the weeds</li>
+            <li>Reversing the first few bytes of a Master Boot Record (MBR) that may be corrupt</li>
+            <li>Debugging an embedded systems device driver</li>
+            <li>Satisying your own intellectual curiosity (Does there exist some sequence of bytes that disassembles to the same logical operation for two separate platforms?)</li>
+        </ul>
+
+        <p><p>See the <a href="http://blog.onlinedisassembler.com/blog/?p=44">tutorial</a> for an overview of <b>ODA</b>'s features.
+
+        <p><p><b>ODA</b> is a BETA release that is limited by the resource constraints of the server on which it is
+        hosted and the spare time of its creators.  If you find <b>ODA</b> useful, have a feature request, or want to
+        comment in any way, please <a href="mailto:admin@onlinedisassembler.com">drop us a line!</a>
+
+    <h4>Supported Architectures</h4>
+    <ul style="height:200px;overflow: scroll;">
+        <li ng-repeat="arch in data.architectures track by $index">{{ arch }}</li>
+    </ul>
+
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-primary" ng-click="close()">Close</a>
+    </div>
+</script>
+
+<script type="text/ng-template" id="openStructEditorModal.html">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="cancel()">&times;</button>
+        <h3>{{data.name}}</h3>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+        <table class="table table-striped sidebar-table table-condensed" id="struct-editor-table">
+            <thead>
+                <tr>
+                    <th class="col-sm-4" style="width:1%">Name</th>
+                    <th class="col-sm-4" style="text-align: left; width:90%">Type</th>
+                    <th class="col-sm-4" style="text-align: left; width:10%"></th>
+                </tr>
+            </thead>
+            <tbody class="scrollContent">
+                    <tr ng-repeat="f in data.fields">
+                        <td class="str-offset" style="text-align: left; width:45%">{{ f.name }}</td>
+                        <td class="string" style="text-align: left; width:45%">{{ f.type }}</td>
+                        <td class="string" style="text-align: left; width:10%"><button class="btn btn-primary" ng-click="deleteField($index)">Delete Field</button></td>
+                    </tr>
+                    <tr>
+                        <td class="str-offset" style="text-align: left; width:45%"><input type="text" class="form-control" ng-model="newfield.name" /></td>
+                        <td class="string" style="text-align: left; width:45%">
+                            <select class="form-control" id="select-field-type" ng-model="newfield.type" name="select-field-type">
+                            <option ng-repeat="ft in data.fieldTypes">{{ft.name}}</option>
+                            </select>
+                        </td>
+                        <td class="string" style="text-align: left; width:10%"><button class="btn btn-primary" ng-click="addField(newfield.name,newfield.type)">Add Field</button></td>
+                    </tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+
+{% endverbatim %}
+
+
+
+<script type="text/javascript">
+
+    {% autoescape off %}
+    window.isLazyUser = {{ isLazyUser | jsonify }}
+    window.examples = JSON.parse('{{ examples | jsonify }}');
+    window.saved = {{ saved | jsonify }};
+    window.oda_master = {
+        project_name : {{ master.project_name| jsonify }},
+        short_name : '{{master.short_name }}',
+        content_type : '{{ master.content_type.id }}',
+        object_id : {{ master.object_id }},
+        revision : {{ master.revision | jsonify}},
+        section_info : {
+            start_addr : {{ section_info.start_addr }},
+            stop_addr : {{ section_info.stop_addr }}
+        },
+        binary : {
+            id : '0',
+            liveMode : {{ binary.is_live_mode|jsonify  }},
+            target : '{{  binary.options.target }}',
+            arch : '{{ binary.options.architecture }}',
+            size : '{{ binary.size|filesizeformat }}',
+            text : {% if binary.is_live_mode %}{{ binary.binary_string_display | jsonify }}{% else %}""{%  endif %},
+            options: {
+                architecture: {{  binary.options.architecture | jsonify }},
+                base_address: {{  binary.options.base_address | jsonify }},
+                endian: {{ binary.options.endian | jsonify }},
+                selected_opts: {{  binary.options.selected_opts | jsonify }}
+            }
+        }
+    };
+    window.system = {
+        architectures: {{  architectures | jsonify }},
+        endians: {{ endians | jsonify }}
+    };
+
+    {% endautoescape %}
+
+
+    $(document).ready(function() {
+        oda_main();
+    });
+</script>
+
+{% endblock %}

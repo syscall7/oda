@@ -1,0 +1,10 @@
+/* font for the branch lines */
+@font-face {
+  font-family: 'DejaVuSansMono';
+
+  /* EOT file for old IE */
+  src: url('./fonts/DejaVuSansMono.eot');
+
+  /* TTF file for CSS3 browsers */
+  src: url('./fonts/DejaVuSansMono.ttf') format('truetype');
+}

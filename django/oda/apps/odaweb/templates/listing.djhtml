@@ -1,0 +1,73 @@
+{% for chunk in chunks %}
+    <tbody>
+    {% for inst in chunk.instUnits %}
+
+        {%  if inst.function %}
+                <tr addr={{ inst.offset|stringformat:"08x" }}>
+                    <td class="branchLines">{{ inst.branch_label|safe }}</td>
+                    <td class="offset">{{inst.section_name}}:0x{{ inst.offset|stringformat:"08x" }}</td>
+                    <td></td>
+                    <td class="function" colspan="2">; =============== F U N C T I O N ====================================</td>
+                </tr>
+                
+                {% for xref in inst.function.xrefs %}
+                    <tr addr={{ inst.offset|stringformat:"08x" }}>
+                        <td class="branchLines">{{ inst.branch_label|safe }}</td>
+                        <td class="offset">{{inst.section_name}}:0x{{ inst.offset|stringformat:"08x" }}</td>
+                        <td></td>
+                        <td class="xref" colspan="2">; CODE XREF: <a href="#view/tab-assembly/offset/{{xref|stringformat:"08x"}}">0x{{xref|stringformat:"08x"}}</a></td>
+                    </tr>
+                {%  endfor %}
+        {% endif %}
+
+        {%  if inst.labelName %}
+                <tr addr={{ inst.offset|stringformat:"08x" }}>
+                    <td class="branchLines">{{ inst.branch_label|safe }}</td>
+                    <td class="offset">{{inst.section_name}}:0x{{ inst.offset|stringformat:"08x" }}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                <tr addr={{ inst.offset|stringformat:"08x" }}>
+                    <td class="branchLines">{{ inst.branch_label|safe }}</td>
+                    <td class="offset">{{inst.section_name}}:0x{{ inst.offset|stringformat:"08x" }}</td>
+                    <td></td>
+                    {%  if inst.function %}
+                        <td>
+                            <span class="listing-retval" contenteditable="true">
+                                {% if inst.retval %}
+                                    {{ inst.retval|safe }}
+                                {% else %}
+                                    unknown
+                                {% endif %}
+                            </span>
+                            <span class="listing-label" contenteditable="true"><b>{{ inst.labelName|safe }}</b></span>
+                            (<span class="listing-args" contenteditable="true">
+                                {% if inst.args %}
+                                    {{ inst.args|safe }}
+                                {% else %}
+                                    unknown
+                                {% endif %}
+                            </span>):
+                        </td>
+                    {% else %}
+                        <td><span class="listing-label" contenteditable="true">{{ inst.labelName|safe }}</span>:</td>
+                    {% endif %}
+                    <td></td>
+                </tr>
+        {%  endif %}
+
+                <tr addr={{ inst.offset|stringformat:"08x" }}>
+                    <td class="branchLines">{{ inst.branch|safe }}</td>
+                    <td class="offset">{{inst.section_name}}:0x{{ inst.offset|stringformat:"08x" }}</td>
+                    <td class="raw">{{ inst.rawBytes }}</td>
+                    <td class="insn-col"><insn>{{ inst.instStr.strip|safe }}</insn></td>
+                    <td class="comment-col"><div class="comment" contenteditable="true">{% if inst.comment %};{% endif %}&nbsp;{{ inst.comment|safe }}</div ></td>
+                </tr>
+
+    {%  endfor %}
+    </tbody>
+{%  endfor %}
+
+

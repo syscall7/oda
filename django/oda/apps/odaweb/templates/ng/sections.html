@@ -1,0 +1,38 @@
+{% verbatim %}
+
+<script type="text/ng-template" id="sections.html">
+
+<table class="sections-table"  ng-controller="SectionsController" style="min-width:750px;">
+    <tbody><tr>
+        <th>Name</th>
+        <th>Size</th>
+        <th>VMA</th>
+        <th>Flags</th>
+        <th>Alignment</th>
+    </tr>
+    
+        <tr class="even" ng-repeat="section in sections">
+            <td><span class="clickable" ng-click="setPosition(section.vma)">{{ section.name }}</span></td>
+            <td align="right">{{ section.size }} bytes</td>
+            <td align="right">{{ section.vma | hex:8 }} </td>
+            <td align="left">
+                <span ng-repeat="flag in section.flags">
+                    <span ng-class="[getFlagLabel(flag.name), 'label']"
+                    popover-trigger="mouseenter"
+                    popover-title="{{ flag.name }}"
+                    popover="{{ flag.desc }}"
+
+                    style="margin-right:5px;">
+
+                    {{ getFlagText(flag.name) }}
+                    </span>
+                </span>
+            </td>
+            <td align="right">2<sup>0</sup></td>
+        </tr>
+    
+</tbody></table>
+
+</script>
+
+{% endverbatim %}

@@ -1,0 +1,13 @@
+mysql_root_password_update: yes
+mysql_root_password: password
+mysql_databases:
+  - name: odapython3
+    encoding: utf8
+    collation: utf8_general_ci
+
+oda_django_settings: oda.settings.development
+oda_django_media_root: "{{ oda_install_path }}/tmp"
+oda_mysql_user: root
+oda_mysql_password: "{{ mysql_root_password }}"
+oda_mysql_database: "{{ mysql_databases[0].name }}"
+

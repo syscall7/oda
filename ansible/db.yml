@@ -1,0 +1,10 @@
+- hosts: db
+  pre_tasks:
+    - name: Pre-install python3 mysql package, since ansible run under python3
+      apt:
+        name: python3-mysqldb
+      become: yes
+  roles:
+    - common
+    - role: geerlingguy.mysql
+      become: yes

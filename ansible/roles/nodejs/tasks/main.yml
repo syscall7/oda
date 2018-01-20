@@ -1,0 +1,12 @@
+- name: Update node repository
+  shell: curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+  become: yes
+  
+- name: Install web packages
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    cache_valid_time: 3600
+  with_items:
+    - nodejs
+  become: yes

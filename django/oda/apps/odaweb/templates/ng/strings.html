@@ -1,0 +1,37 @@
+{% verbatim %}
+
+<script type="text/ng-template" id="strings.html">
+
+<div  ng-controller="StringsController">
+    <div class="oda-sidebar-title">Strings</div>
+    <div class="input-group">
+        <span class="input-group-addon">Filter</span>
+        <input type="text" class="form-control" placeholder="Substring" ng-model="search.string">
+    </div>
+    <div class="sidebar-scroll-container">
+        <table class="table table-striped sidebar-table table-condensed" id="strings-table">
+            <thead>
+                <tr>
+                    <th class="col-sm-4" style="width:1%">Address</th>
+                    <th class="col-sm-4" style="text-align: left; width:100%">String</th>
+                </tr>
+            </thead>
+            <tbody class="scrollContent">
+                    <tr ng-repeat="string in strings | filter:search | orderBy:'addr'">
+                        <td class="str-offset" style="width:1%">
+                            <span class="clickable"
+                                  ng-click="setPosition(string.addr)">0x{{ string.addr.toString(16) }}</span>
+                        </td>
+                        <td class="string" style="text-align: left; width:100%">{{ string.string }}</td>
+                    </tr>
+            </tbody>
+        </table>
+
+        <div ng-show="!strings">
+            <em>No strings found</em>
+        </div>
+    </div>
+</div>
+
+</script>
+{% endverbatim %}

@@ -1,0 +1,38 @@
+{# if we don't recognize the object file format #}
+{% if target == 'binary' %}
+    <div class='alert alert-block'>
+        {# if the file description is anything better than plain 'data', which isn't very interesting #}
+        {% if file_format.0 != 'data' %}
+            We have detected the uploaded file as:
+            <ul>
+                {% for f in file_format %}
+                    <li>{{ f }}</li>
+                {% endfor %}
+            </ul>
+            <br>
+        {% endif %}
+        This file is not a recognized object file.  To continue disassembling this file as a raw binary image, please
+        select from the platform options below.
+    </div>
+
+{# else, if we recognize the file format, but can't determine the architecture #}
+{% elif arch == 'UNKNOWN!'%}
+    <div class='alert alert-success'>
+        We detected the object file format for this file as {{ target }}, but we cannot determine the architecture.
+        To continue disassembling this file, please select from the platform options below.
+    </div>
+
+{# else, we recognize both the file format and the architecture #}
+{% else %}
+    <div class="alert alert-success">
+        We have detected the object file format as {{ target }}:
+        <ul>
+        {% for f in file_format %}
+            <li>{{ f }}</li>
+        {% endfor %}
+        </ul>
+        <br>
+        Please select from the platform options below.
+    </div>
+
+{% endif %}

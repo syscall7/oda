@@ -1,0 +1,36 @@
+{% verbatim %}
+<script type="text/ng-template" id="live_entry.html">
+<div class="sidebar-content" ng-controller="LiveEntryController" id="hex-sidebar-scroll">
+    <div class="oda-sidebar-title">Live View</div>
+
+    <div class="alert alert-info">
+        Set the platform below.  Then watch the disassembly window update as you type hex bytes in the
+        text area.  You can also upload an ELF, PE, COFF, Mach-O, or other executable file from the <em>File</em> menu.
+    </div>
+
+    <div class="accordion" id="accordion3" style="padding-bottom:10px">
+        <button id="platform-btn" ng-click="resizeTextArea()" type="button" class="btn btn-small btn-danger" data-toggle="collapse" data-target="#collapseThree">
+            Platform: <span class="platform-option">{{ options.architecture }}</span>
+        </button>
+        <div id="collapseThree" class="accordion-body collapse">
+            <div class="accordion-inner"
+                 style="border: 1px solid #e5e5e5; border-radius: 5px; margin-top: 10px; width:95%;padding: 10px;">
+                <div id="live-mode-platform-options-form2" ng-include src="'new_options_template.html'">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-warning" id="hex-alert" ng-show="entryError">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Warning!</strong> You can only disassemble hexadecimal characters, check your inputs.
+    </div>
+
+    <textarea class="sidebar-scroll-container-text form-control" id="hex"
+              style="width:95%; margin-bottom: 5px; height:99%;"
+              data-bind="value: hex"
+              ng-change="liveEntryChange()"
+              ng-model="liveEntryText"></textarea>
+</div>
+</script>
+{% endverbatim %}

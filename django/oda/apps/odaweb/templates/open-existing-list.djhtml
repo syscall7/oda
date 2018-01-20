@@ -1,0 +1,5 @@
+{% for file in files %}
+    <li><a href="{{ file.short_name }}">{{ file.name }}</a></li>
+{% empty %}
+    <li class="disabled"><a href="#">No files exist</a></li>
+{% endfor %}

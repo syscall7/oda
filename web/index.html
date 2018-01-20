@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/static/oda.png" />
+    <title>oda-web</title>
+
+    <script type="text/javascript" src="/static/dagre/d3.v3.js"></script>
+    <script type="text/javascript" src="/static/dagre/dagre-d3.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/default.min.css">
+  </head>
+  <body>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+
+    <script id="instruction-graph-data-section" type="text/x-handlebars-template">
+      <div class="alert alert-info" role="alert">Call graph only available for code sections. 0x{{ hex offset }} is within a data section.</div>
+    </script>
+
+    <script id="instruction-graph-too-complicated" type="text/x-handlebars-template">
+      <div class="alert alert-warning">The instruction graph at address 0x{{ hex offset }} contains {{ numNodes }} nodes and
+        {{ numLinks }} edges. This is more then this graph implementation can handle and cannot be displayed. Todo: Improve this code ;-)
+      </div>
+    </script>
+
+    <script id="instruction-graph-error" type="text/x-handlebars-template">
+      <div class="alert alert-warning">Instruction graph not available for address 0x{{ hex offset }}</div>
+    </script>
+
+    <script id="graph-node-template" type="text/x-handlebars-template">
+      <tr data-addr='{{offset}}'>
+        <td>{{section_name}}:{{hex vma}}</td>
+        <td class='insn'>{{{instStr}}}{{targetRefName}}</td>
+        <td class='comment'>{{comment.comment}}</td>
+      </tr>
+    </script>
+
+  </body>
+</html>

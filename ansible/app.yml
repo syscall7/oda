@@ -1,0 +1,4 @@
+- hosts: app
+  roles:
+    - common
+    - oda

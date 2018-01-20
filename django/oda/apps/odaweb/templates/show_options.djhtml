@@ -1,0 +1,29 @@
+<div class="form-group">
+    <label class="control-label col-sm-4 upload-form-control" for="endian-select">Endian</label>
+
+    <div class="col-sm-8">
+        <select class="platform-option-select endian-select form-control"
+                ng-model="options.endian"
+                name="normalSelect" ng-change="optionsUpdated('here')">
+            {% for k,v in supported_endians.iteritems %}
+                <option value="{{k}}" {% if k in selected_opts %} selected {% endif %}>{{k}}</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+{% for widgetName, widget, title, desc, unused, opts in options %}
+    {% if widget == "select" %}
+        <div class="form-group">
+            <label class="control-label col-sm-4 upload-form-control" for={{widgetName}}>{{title}}</label>
+            <div class="col-sm-8">
+                <select class="span2 platform-option-select form-control" id={{widgetName}} name="normalSelect"
+                        ng-model="options.{{ widgetName }}"
+                        ng-change="optionsUpdated('here')">
+                {% for opt in opts %}
+                    <option value="{{opt}}" {% if opt in selected_opts %} selected {% endif %} >{{opt}}</option>
+                {% endfor %}
+                </select>
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}
