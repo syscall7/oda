@@ -55,7 +55,7 @@
   export default {
     data () {
       return {
-        email: 'bill.davis@syscall7.com',
+        email: null,
         details: null
       }
     },
