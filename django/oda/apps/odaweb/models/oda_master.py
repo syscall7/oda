@@ -24,6 +24,11 @@ class OdbFileLoader(object):
     def load_odb_file(self, oda_master):
         logger.info("load_odb_file odb_master:%s" % oda_master.id)
 
+        try:
+            oda_master.odb_file_storage
+        except OdbFileStorage.DoesNotExist:
+            return None
+
         if oda_master.odb_file_storage is None:
             return None
 

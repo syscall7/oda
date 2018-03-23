@@ -6,9 +6,9 @@ COMPRESS_ENABLED = False
 DATABASES = {
     'default': {
         'ENGINE':   'django.db.backends.mysql',
-        'NAME':     os.environ.get('ODA_MYSQL_DATABASE'),
-        'USER':     os.environ.get('ODA_MYSQL_USER'),
-        'PASSWORD': os.environ.get('ODA_MYSQL_PASSWORD'),
+        'NAME':     'odapython3',
+        'USER':     'root',
+        'PASSWORD': 'password',
         'HOST':     'localhost',         # Set to empty string for localhost.
         'PORT':     '',                  # Set to empty string for default.
     }

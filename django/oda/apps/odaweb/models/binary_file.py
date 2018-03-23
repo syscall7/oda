@@ -16,7 +16,8 @@ logger = logging.getLogger(__name__)
 
 # this is where we'll cache the GoogleStorage files locally
 LOCAL_CACHE_DIR = os.path.join(settings.MEDIA_ROOT, 'cache')
-
+if not os.path.isdir(LOCAL_CACHE_DIR):
+    raise Exception("The local cache dir (%s) needs to be created" % (LOCAL_CACHE_DIR))
 
 class BinaryFileModel(binaries.Binary):
     def __init__(self, id):

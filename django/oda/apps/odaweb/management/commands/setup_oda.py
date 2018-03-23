@@ -23,9 +23,17 @@ def load_examples(owner=None):
 
     for example in Examples:
         short_name = example['short_name']
+        valid_file_storage_id = True
+
         if OdaMaster.objects.filter(short_name=short_name).exists():
             print('Example %s already exists in the database' % short_name)
-            continue
+            oda_master = OdaMaster.objects.filter(short_name=short_name).first()
+        else:
+            oda_master = OdaMaster(short_name=short_name,
+                               project_name=example['project_name'],
+                               owner=owner,
+                               default_permission=
+                               OdaMasterPermissionLevel.read.value)
 
         print('Adding example %s to database' % short_name)
 
@@ -51,11 +59,7 @@ def load_examples(owner=None):
                 odb_file.execute(CreateLabelOperation(vma, label))
                 print("Saving label %s To %s" % (label, str(odb_file)))
 
-        oda_master = OdaMaster(short_name=short_name,
-                               project_name=example['project_name'],
-                               owner=owner,
-                               default_permission=
-                                    OdaMasterPermissionLevel.read.value)
+
         oda_master.odb_file = odb_file
         oda_master.save()
 
