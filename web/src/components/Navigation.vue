@@ -34,12 +34,12 @@
         </b-nav-form>-->
 
         <b-nav-item-dropdown text="Examples" right>
-          <b-dropdown-item href="#/odaweb/strcpy_x86">strcpy_x86</b-dropdown-item>
-          <b-dropdown-item href="#/odaweb/strcpy_arm">strcpy_arm</b-dropdown-item>
-          <b-dropdown-item href="#/odaweb/whoami">whoami</b-dropdown-item>
-          <b-dropdown-item href="#/odaweb/mkdir">mkdir</b-dropdown-item>
-          <b-dropdown-item href="#/odaweb/cat">cat</b-dropdown-item>
-          <b-dropdown-item href="#/odaweb/chown">chown</b-dropdown-item>
+          <b-dropdown-item href="/odaweb/strcpy_x86">strcpy_x86</b-dropdown-item>
+          <b-dropdown-item href="/odaweb/strcpy_arm">strcpy_arm</b-dropdown-item>
+          <b-dropdown-item href="/odaweb/whoami">whoami</b-dropdown-item>
+          <b-dropdown-item href="/odaweb/mkdir">mkdir</b-dropdown-item>
+          <b-dropdown-item href="/odaweb/cat">cat</b-dropdown-item>
+          <b-dropdown-item href="/odaweb/chown">chown</b-dropdown-item>
         </b-nav-item-dropdown>
 
         <b-nav-item-dropdown right v-if="isActiveUser">

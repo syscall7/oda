@@ -62,7 +62,7 @@
     "jest": "^21.2.0",
     "jest-serializer-vue": "^0.3.0",
     "keypress.js": "^2.1.4",
-    "nightwatch": "^0.9.12",
+    "nightwatch": "^0.9.20",
     "node-notifier": "^5.1.2",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
     "ora": "^1.2.0",

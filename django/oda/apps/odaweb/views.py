@@ -331,7 +331,7 @@ def connect(request, share_name):
     return odb_file_view(request, share.odaMaster)
 
 @allow_lazy_user
-def oda(request):
+def oda(request, short_name):
     import os
     from django.conf import settings
     index_file = os.path.join(settings.BASE_DIR, '..', '..', 'web', 'dist', 'index.html')

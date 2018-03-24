@@ -9,6 +9,7 @@ import Profile from '@/components/user/Profile'
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/odaweb/:shortName',
