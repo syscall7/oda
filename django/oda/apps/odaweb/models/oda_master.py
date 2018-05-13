@@ -48,6 +48,8 @@ class OdbFileLoader(object):
                 odb_file.execute(PassiveScanOperation())
 
                 self.store_odb_file(oda_master, odb_file)
+            else:
+                odb_file = None
 
             return odb_file
 
