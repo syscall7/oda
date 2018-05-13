@@ -49,7 +49,7 @@
 - name: Initiate virtualenv
   pip:
     virtualenv: "{{ oda_install_path }}/env"
-    virtualenv_python: python3.5
+    virtualenv_python: python3.6
     requirements: "{{ oda_install_path }}/site/requirements.txt"
 
 - name: Set default virtualenv in .profile
