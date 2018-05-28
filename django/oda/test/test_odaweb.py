@@ -16,15 +16,8 @@ class IndexTest(OdaApiTestCase):
 
         self.assertEqual(response.status_code, 200)
 
-        self.assertTrue('master' in response.context)
-        self.assertTrue('examples' in response.context)
-
-    def test_mkdir(self):
-        response = self.client.get('/odaweb/mkdir')
-
-        self.assertEqual(response.status_code, 200)
-
-        self.assertEqual(response.context['binary'].name, 'mkdir')
+        #self.assertTrue('master' in response.context)
+        #self.assertTrue('examples' in response.context)
 
     def test_upload_elf(self):
         f = open(os.path.join(cwd, '../apps/odaweb/examples/mkdir'), 'rb')
