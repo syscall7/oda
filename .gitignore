@@ -24,6 +24,7 @@ CACHE
 
 # py.test cache
 .cache
+.pytest_cache
 
 # Environments
 .env
