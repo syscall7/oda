@@ -1,0 +1,15 @@
+FROM ubuntu:bionic-20190204
+ENV PYTHONUNBUFFERED 1
+
+
+RUN apt-get update && apt-get install --yes curl gnupg2 && \
+    curl -sL https://deb.nodesource.com/setup_11.x | bash - && \
+    apt-get install -y nodejs
+
+RUN mkdir /code
+WORKDIR /code
+
+COPY . /code/
+
+WORKDIR /code/web
+RUN npm install

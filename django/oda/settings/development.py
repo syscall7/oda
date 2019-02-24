@@ -9,8 +9,8 @@ DATABASES = {
         'NAME':     'odapython3',
         'USER':     'root',
         'PASSWORD': 'password',
-        'HOST':     'localhost',         # Set to empty string for localhost.
-        'PORT':     '',                  # Set to empty string for default.
+        'HOST':     'db',         # Set to empty string for localhost.
+        'PORT':     '3306',                  # Set to empty string for default.
     }
 }
 

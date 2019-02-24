@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  db:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=odapython3
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: bash -c "./wait-for-it.sh -h db -p 3306 -t 0 && python3 django/manage.py migrate && python3 django/manage.py setup_oda && python3 django/manage.py runserver 0.0.0.0:8001"
+    environment:
+      - DJANGO_SETTINGS_MODULE=oda.settings.development
+    volumes:
+      - .:/code
+    ports:
+      - "8001:8001"
+    depends_on:
+      - db
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.nodejs
+    command: npm run dev
+    volumes:
+      - .:/code
+      - /code/web/node_modules
+    ports:
+      - "8000:8000"

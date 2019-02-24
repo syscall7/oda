@@ -11,7 +11,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/odaweb': 'http://localhost:8001'
+      '/odaweb': 'http://backend:8001'
     },
 
     // Various Dev Server settings

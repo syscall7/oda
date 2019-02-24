@@ -39,6 +39,6 @@ sphinx
 # Sphinx "Read the Docs" theme
 sphinx_rtd_theme
 
-git+ssh://git@github.com/syscall7/python-bfd.git
+git+https://github.com/syscall7/python-bfd.git
 
-git+ssh://git@github.com/williballenthin/python-idb.git@b8223c2c524683359c5d7425bfed28abf15987d8#egg=python-idb
+git+https://github.com/williballenthin/python-idb.git@b8223c2c524683359c5d7425bfed28abf15987d8#egg=python-idb
