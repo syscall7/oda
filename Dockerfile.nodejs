@@ -12,4 +12,3 @@ WORKDIR /code
 COPY . /code/
 
 WORKDIR /code/web
-RUN npm install
