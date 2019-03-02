@@ -12,7 +12,7 @@ function error (e) {
 
 export async function loadOdbFile () {
   try {
-    const response = await axios.get(store.state.apiRoot + '/odaweb/api/load', {
+    const response = await axios.get(store.state.apiRoot + '/odaapi/api/load', {
       params: {
         short_name: store.state.shortName,
         revision: store.state.revision
@@ -27,7 +27,7 @@ export async function loadOdbFile () {
 export async function loadDisplayUnits (addr, units) {
   console.log('loading display units', addr, units)
   try {
-    const response = await axios.get(store.state.apiRoot + '/odaweb/api/displayunits/', {
+    const response = await axios.get(store.state.apiRoot + '/odaapi/api/displayunits/', {
       params: {
         short_name: store.state.shortName,
         revision: store.state.revision,
@@ -45,7 +45,7 @@ export async function loadDisplayUnits (addr, units) {
 
 export async function loadBranches () {
   try {
-    const response = await axios.get(`/odaweb/api/masters/${store.state.shortName}/branches/`)
+    const response = await axios.get(`/odaapi/api/masters/${store.state.shortName}/branches/`)
     return response.data.branches
   } catch (e) {
     error({e})
@@ -54,7 +54,7 @@ export async function loadBranches () {
 
 export async function vmaToLda (vma) {
   try {
-    const response = await axios.get(store.state.apiRoot + '/odaweb/api/displayunits/1/vmaToLda', {
+    const response = await axios.get(store.state.apiRoot + '/odaapi/api/displayunits/1/vmaToLda', {
       params: {
         short_name: store.state.shortName,
         revision: store.state.revision,
@@ -69,7 +69,7 @@ export async function vmaToLda (vma) {
 }
 
 export async function findBytes (bytes) {
-  const response = await axios.get(store.state.apiRoot + '/odaweb/api/find/', {
+  const response = await axios.get(store.state.apiRoot + '/odaapi/api/find/', {
     params: {
       short_name: store.state.shortName,
       revision: store.state.revision,
@@ -82,7 +82,7 @@ export async function findBytes (bytes) {
 
 export async function setBinaryText (binaryText) {
   try {
-    const response = await axios.patch(store.state.apiRoot + '/odaweb/api/binarystrings/0/', {
+    const response = await axios.patch(store.state.apiRoot + '/odaapi/api/binarystrings/0/', {
       short_name: store.state.shortName,
       revision: store.state.revision,
       binary_string: binaryText
@@ -94,13 +94,13 @@ export async function setBinaryText (binaryText) {
 }
 
 export async function canEdit (shortName) {
-  const response = await axios.get(`/odaweb/api/masters/${shortName}/can_edit/`)
+  const response = await axios.get(`/odaapi/api/masters/${shortName}/can_edit/`)
   console.log('canEdit', response.data)
   return response.data
 }
 
 export async function copyOdaMaster (shortName) {
-  const response = await axios.get(`/odaweb/api/masters/${shortName}/clone/`)
+  const response = await axios.get(`/odaapi/api/masters/${shortName}/clone/`)
   return response.data
 }
 
@@ -109,7 +109,7 @@ export async function getArchitectureOptions (arch) {
     return Promise.resolve([])
   }
   try {
-    const response = await axios.get(`/odaweb/api/disassembler/0/options/?arch=${arch}`)
+    const response = await axios.get(`/odaapi/api/disassembler/0/options/?arch=${arch}`)
     return response.data
   } catch (e) {
     error({e, message: `getting the architecture ${arch} options`})
@@ -122,7 +122,7 @@ export async function setBinaryOptions (architecture, baseAddress, endian, selec
   }
 
   try {
-    const response = await axios.patch(`/odaweb/api/options/0/`, {
+    const response = await axios.patch(`/odaapi/api/options/0/`, {
       architecture: architecture,
       base_address: baseAddress,
       endian: endian,
@@ -142,7 +142,7 @@ export async function uploadFile (file, projectName, defaultSharingMode) {
     formData.append('filedata', file)
     formData.append('project_name', projectName)
     formData.append('default_sharing_level', defaultSharingMode)
-    const response = await axios.post('/odaweb/_upload', formData)
+    const response = await axios.post('/odaapi/_upload', formData)
     return response.data
   } catch (e) {
     error({e, message: 'upload a File'})
@@ -150,7 +150,7 @@ export async function uploadFile (file, projectName, defaultSharingMode) {
 }
 
 export async function graph (addr) {
-  const response = await axios.get(store.state.apiRoot + '/odaweb/api/graph', {
+  const response = await axios.get(store.state.apiRoot + '/odaapi/api/graph', {
     params: {
       short_name: store.state.shortName,
       revision: store.state.revision,
@@ -161,7 +161,7 @@ export async function graph (addr) {
 }
 
 export async function loadParcels () {
-  const response = await axios.get('/odaweb/api/parcels/', {
+  const response = await axios.get('/odaapi/api/parcels/', {
     params: {
       short_name: store.state.shortName,
       revision: store.state.revision
@@ -172,7 +172,7 @@ export async function loadParcels () {
 
 export async function dataToCode (addr) {
   try {
-    const response = await axios.get('/odaweb/api/displayunits/1/makeCode/', {
+    const response = await axios.get('/odaapi/api/displayunits/1/makeCode/', {
       params: {
         short_name: store.state.shortName,
         revision: store.state.revision,
@@ -187,7 +187,7 @@ export async function dataToCode (addr) {
 
 export async function codeToData (addr) {
   try {
-    const response = await axios.get('/odaweb/api/displayunits/1/makeData/', {
+    const response = await axios.get('/odaapi/api/displayunits/1/makeData/', {
       params: {
         short_name: store.state.shortName,
         revision: store.state.revision,
@@ -202,7 +202,7 @@ export async function codeToData (addr) {
 
 export async function createDefinedData (addr, typeKind, typeName, varName) {
   try {
-    const response = await axios.post('/odaweb/api/definedData/', {
+    const response = await axios.post('/odaapi/api/definedData/', {
       short_name: store.state.shortName,
       revision: store.state.revision,
       vma: addr,
@@ -218,7 +218,7 @@ export async function createDefinedData (addr, typeKind, typeName, varName) {
 
 export async function undefineData (addr) {
   try {
-    const response = await axios.delete('/odaweb/api/definedData/0/', {
+    const response = await axios.delete('/odaapi/api/definedData/0/', {
       data: {
         short_name: store.state.shortName,
         revision: store.state.revision,
@@ -233,7 +233,7 @@ export async function undefineData (addr) {
 
 export async function makeComment (comment, vma) {
   try {
-    const response = await axios.post('/odaweb/api/comments/', {
+    const response = await axios.post('/odaapi/api/comments/', {
       short_name: store.state.shortName,
       revision: store.state.revision,
       comment: comment,
@@ -247,7 +247,7 @@ export async function makeComment (comment, vma) {
 
 export async function loadOperations () {
   try {
-    const response = await axios.get('/odaweb/api/operations/', {
+    const response = await axios.get('/odaapi/api/operations/', {
       params: {
         short_name: store.state.shortName,
         revision: store.state.revision
@@ -260,7 +260,7 @@ export async function loadOperations () {
 }
 
 export async function decompiled (addr) {
-  const response = await axios.get('/odaweb/api/decompiler', {
+  const response = await axios.get('/odaapi/api/decompiler', {
     params: {
       short_name: store.state.shortName,
       revision: store.state.revision,
@@ -272,7 +272,7 @@ export async function decompiled (addr) {
 
 export async function setDefaultPermissionLevel (permissionLevel) {
   try {
-    const response = await axios.post(`/odaweb/api/masters/${store.state.shortName}/set_default_permission_level/`, {
+    const response = await axios.post(`/odaapi/api/masters/${store.state.shortName}/set_default_permission_level/`, {
       permission_level: permissionLevel
     })
     return response.data
@@ -283,7 +283,7 @@ export async function setDefaultPermissionLevel (permissionLevel) {
 
 export async function createFunction (vma, name, retval, args) {
   try {
-    const response = await axios.post(`/odaweb/api/displayunits/1/makeFunction/`, {
+    const response = await axios.post(`/odaapi/api/displayunits/1/makeFunction/`, {
       short_name: store.state.shortName,
       revision: store.state.revision,
       vma: vma,
@@ -299,7 +299,7 @@ export async function createFunction (vma, name, retval, args) {
 
 export async function updateFunction (vma, name, retval, args) {
   try {
-    const response = await axios.patch(`/odaweb/api/functions/0/`, {
+    const response = await axios.patch(`/odaapi/api/functions/0/`, {
       short_name: store.state.shortName,
       revision: store.state.revision,
       vma: vma,
@@ -315,7 +315,7 @@ export async function updateFunction (vma, name, retval, args) {
 
 export async function createStructure (name) {
   try {
-    const response = await axios.post(`/odaweb/api/cstructs/`, {
+    const response = await axios.post(`/odaapi/api/cstructs/`, {
       short_name: store.state.shortName,
       revision: store.state.revision,
       is_packed: true,
@@ -330,7 +330,7 @@ export async function createStructure (name) {
 
 export async function deleteStructure (index) {
   try {
-    const response = await axios.delete(`/odaweb/api/cstructs/${index}/`, {
+    const response = await axios.delete(`/odaapi/api/cstructs/${index}/`, {
       data: {
         short_name: store.state.shortName,
         revision: store.state.revision
@@ -353,7 +353,7 @@ export async function updateStructure (index, structure) {
       structFieldTypes[i] = structure.fields[i].type
     }
 
-    const response = await axios.get(`/odaweb/api/cstructs/${index}/modify/`, {
+    const response = await axios.get(`/odaapi/api/cstructs/${index}/modify/`, {
       params: {
         short_name: store.state.shortName,
         revision: store.state.revision,
@@ -370,7 +370,7 @@ export async function updateStructure (index, structure) {
 
 export async function listMyDocuments () {
   try {
-    const response = await axios.get(`/odaweb/api/masters/`)
+    const response = await axios.get(`/odaapi/api/masters/`)
     return response.data
   } catch (e) {
     error({e, message: 'deleting a structure definition'})
@@ -379,7 +379,7 @@ export async function listMyDocuments () {
 
 export async function deleteDocument (shortName) {
   try {
-    const response = await axios.delete(`/odaweb/api/masters/${shortName}/`)
+    const response = await axios.delete(`/odaapi/api/masters/${shortName}/`)
     return response.data
   } catch (e) {
     error({e, message: 'deleting a structure definition'})

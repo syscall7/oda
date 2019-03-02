@@ -48,7 +48,7 @@
             <em>User <i class="fa fa-user"></i></em>
           </template>
           <b-dropdown-item disabled>{{ username }}</b-dropdown-item>
-          <b-dropdown-item href="#/user/profile">Profile</b-dropdown-item>
+          <b-dropdown-item href="/user/profile">Profile</b-dropdown-item>
           <b-dropdown-item @click="logout">Signout</b-dropdown-item>
 
         </b-nav-item-dropdown>
@@ -56,7 +56,7 @@
         <b-button-group>
 
           <b-button size="sm" class="my-1 px-2 btn-primary"
-                    href="#/login"
+                    href="/login"
                     v-if="!isActiveUser"
                     right>
             <i class="fa fa-lock"></i>
@@ -64,7 +64,7 @@
           </b-button>
 
           <b-button size="sm" class="my-1 px-2 btn-primary"
-                    href="#/signup"
+                    href="/signup"
                     variant="success"
                     v-if="!isActiveUser"
                     right>
