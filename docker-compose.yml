@@ -35,3 +35,13 @@ services:
       - /code/web/node_modules
     ports:
       - "8000:8000"
+  socket:
+    build:
+      context: .
+      dockerfile: Dockerfile.socketapp
+    command: bash -c "npm install && npm start"
+    volumes:
+      - .:/code
+      - /code/socketapp/node_modules
+    ports:
+      - "8080:8080"

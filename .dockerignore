@@ -1,1 +1,7 @@
-web/node_modules
+.env
+.github
+.idea
+.vagrant
+decompiler
+doc
+*/node_modules
