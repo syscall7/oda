@@ -15,7 +15,7 @@ class MakeFunctionUnitTest(OdaApiTestCase):
         FUNC_RETVAL = 'uint32_t'
 
         # create a function
-        response = self.client.post('/odaweb/api/displayunits/1/makeFunction/',
+        response = self.client.post('/odaapi/api/displayunits/1/makeFunction/',
                                     {'revision': 0,
                                      'short_name': 'mkdir',
                                      'vma': FUNC_ADDR,
@@ -28,7 +28,7 @@ class MakeFunctionUnitTest(OdaApiTestCase):
         self.assertEqual(response.data['function'], FUNC_NAME)
 
         # verify the function now appears in the function list
-        response = self.client.get('/odaweb/api/functions/',
+        response = self.client.get('/odaapi/api/functions/',
                                    {'revision': 0, 'short_name': 'mkdir'},
                                    format='json')
 
@@ -40,7 +40,7 @@ class MakeFunctionUnitTest(OdaApiTestCase):
         self.assertEqual(funcs[FUNC_ADDR]['retval'], FUNC_RETVAL)
 
         # verify the function now appears in the symbol list
-        response = self.client.get('/odaweb/api/symbols/',
+        response = self.client.get('/odaapi/api/symbols/',
                                    {'revision': 0, 'short_name': 'mkdir'},
                                    format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -60,7 +60,7 @@ class MakeFunctionUnitTest(OdaApiTestCase):
         FUNC_RETVAL = 'uint32_t'
 
         # edit an existing function
-        response = self.client.patch('/odaweb/api/functions/1/',
+        response = self.client.patch('/odaapi/api/functions/1/',
                                      {'revision': 0,
                                       'short_name': 'mkdir',
                                       'vma': FUNC_ADDR,
@@ -72,7 +72,7 @@ class MakeFunctionUnitTest(OdaApiTestCase):
         self.assertEqual(response.data['error'], None)
 
         # verify the function updates appear in the function list
-        response = self.client.get('/odaweb/api/functions/',
+        response = self.client.get('/odaapi/api/functions/',
                                    {'revision': 0, 'short_name': 'mkdir'},
                                    format='json')
 
@@ -84,7 +84,7 @@ class MakeFunctionUnitTest(OdaApiTestCase):
         self.assertEqual(funcs[FUNC_ADDR]['retval'], FUNC_RETVAL)
 
         # verify the function also appears correctly in the symbol list
-        response = self.client.get('/odaweb/api/symbols/',
+        response = self.client.get('/odaapi/api/symbols/',
                                    {'revision': 0, 'short_name': 'mkdir'},
                                    format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)

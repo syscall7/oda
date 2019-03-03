@@ -8,7 +8,7 @@ class MakeDataUnitTest(OdaApiTestCase):
 
     def test_make_data_on_data(self):
         # make data on data, should fail
-        response = self.client.get('/odaweb/api/displayunits/1/makeData/',
+        response = self.client.get('/odaapi/api/displayunits/1/makeData/',
                                    { 'revision': 0,
                                      'short_name': 'mkdir',
                                      'vma': 0x4002cd},
@@ -60,7 +60,7 @@ class MakeDataUnitTest(OdaApiTestCase):
             ('push', 0x4014f0, '.plt',  'ff35faea2000'),
         )
 
-        response = self.client.get('/odaweb/api/displayunits/',
+        response = self.client.get('/odaapi/api/displayunits/',
                                    { 'revision': 0,
                                      'short_name': 'mkdir',
                                      'addr' : '0x004014d0',
@@ -72,12 +72,12 @@ class MakeDataUnitTest(OdaApiTestCase):
         self.assertIsNotNone(rd)
 
         for expected, actual in zip(before_split, rd):
-            self.assertEquals(expected[0], actual['opcode'])
-            self.assertEquals(expected[1], actual['vma'])
-            self.assertEquals(expected[2], actual['section_name'])
-            self.assertEquals(expected[3], actual['rawBytes'])
+            self.assertEqual(expected[0], actual['opcode'])
+            self.assertEqual(expected[1], actual['vma'])
+            self.assertEqual(expected[2], actual['section_name'])
+            self.assertEqual(expected[3], actual['rawBytes'])
 
-        response = self.client.get('/odaweb/api/displayunits/1/makeData/',
+        response = self.client.get('/odaapi/api/displayunits/1/makeData/',
                                    { 'revision': 0,
                                      'short_name': 'mkdir',
                                      'vma': 0x4014d9},
@@ -85,7 +85,7 @@ class MakeDataUnitTest(OdaApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        response = self.client.get('/odaweb/api/displayunits/',
+        response = self.client.get('/odaapi/api/displayunits/',
                                    { 'revision': 0,
                                      'short_name': 'mkdir',
                                      'addr' : '0x004014d0',
@@ -98,9 +98,9 @@ class MakeDataUnitTest(OdaApiTestCase):
 
         for expected, actual in zip(after_split, rd):
             isCode = expected[0] != ''
-            self.assertEquals(expected[0], actual['opcode'])
-            self.assertEquals(expected[1], actual['vma'])
-            self.assertEquals(expected[2], actual['section_name'])
-            self.assertEquals(expected[3], actual['rawBytes'])
-            self.assertEquals(isCode, actual['isCode'])
+            self.assertEqual(expected[0], actual['opcode'])
+            self.assertEqual(expected[1], actual['vma'])
+            self.assertEqual(expected[2], actual['section_name'])
+            self.assertEqual(expected[3], actual['rawBytes'])
+            self.assertEqual(isCode, actual['isCode'])
 

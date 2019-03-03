@@ -13,7 +13,7 @@ class PermissionsUnitTest(OdaApiTestCase):
         otheruser.save()
 
         response = self.client.post(
-            '/odaweb/api/masters/mkdir/permission/',
+            '/odaapi/api/masters/mkdir/permission/',
             {
                 'username':   'otheruser',
                 'permission': 'read',
@@ -27,7 +27,7 @@ class PermissionsUnitTest(OdaApiTestCase):
         self.user.groups.add(group)
 
         response = self.client.post(
-            '/odaweb/api/masters/mkdir/permission/',
+            '/odaapi/api/masters/mkdir/permission/',
             {
                 'usergroup': 'mygroup',
                 'permission': 'read',
@@ -46,7 +46,7 @@ class PermissionsUnitTest(OdaApiTestCase):
         OdaMasterPermission.objects.create(master=oda_master, user=otheruser, permission=perm)
 
         response = self.client.delete(
-            '/odaweb/api/masters/mkdir/permission/',
+            '/odaapi/api/masters/mkdir/permission/',
             {
                 'username': 'otheruser',
                 'permission': 'read',
@@ -65,7 +65,7 @@ class PermissionsUnitTest(OdaApiTestCase):
         OdaMasterPermission.objects.create(master=oda_master, group=group, permission=perm)
 
         response = self.client.delete(
-            '/odaweb/api/masters/mkdir/permission/',
+            '/odaapi/api/masters/mkdir/permission/',
             {
                 'usergroup': 'mygroup',
                 'permission': 'read',
@@ -83,7 +83,7 @@ class PermissionsUnitTest(OdaApiTestCase):
 
         OdaMasterPermission.objects.create(master=oda_master, user=otheruser, permission=perm)
 
-        response = self.client.get('/odaweb/api/masters/mkdir/permissions/', format='json')
+        response = self.client.get('/odaapi/api/masters/mkdir/permissions/', format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data[0]['username'], 'otheruser')
         self.assertEqual(response.data[0]['permission'], 'read')
@@ -97,14 +97,14 @@ class PermissionsUnitTest(OdaApiTestCase):
 
         OdaMasterPermission.objects.create(master=oda_master, user=otheruser, permission=perm)
 
-        response = self.client.get('/odaweb/api/masters/mkdir/', format='json')
+        response = self.client.get('/odaapi/api/masters/mkdir/', format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['permissions'][0]['username'], 'otheruser')
         self.assertEqual(response.data['permissions'][0]['permission'], 'read')
 
     def test_bad_oda_master(self):
         response = self.client.post(
-            '/odaweb/api/masters/does_not_exist/permission/',
+            '/odaapi/api/masters/does_not_exist/permission/',
             {
                 'username':   'otheruser',
                 'permission': 'read',
@@ -116,7 +116,7 @@ class PermissionsUnitTest(OdaApiTestCase):
 
     def test_missing_user(self):
         response = self.client.post(
-            '/odaweb/api/masters/mkdir/permission/',
+            '/odaapi/api/masters/mkdir/permission/',
             {
                 'username':   'does_not_exist',
                 'permission': 'read',
@@ -128,7 +128,7 @@ class PermissionsUnitTest(OdaApiTestCase):
 
     def test_missing_group(self):
         response = self.client.post(
-            '/odaweb/api/masters/mkdir/permission/',
+            '/odaapi/api/masters/mkdir/permission/',
             {
                 'usergroup':   'does_not_exist',
                 'permission': 'read',
@@ -143,7 +143,7 @@ class PermissionsUnitTest(OdaApiTestCase):
         otheruser.save()
 
         response = self.client.post(
-            '/odaweb/api/masters/mkdir/permission/',
+            '/odaapi/api/masters/mkdir/permission/',
             {
                 'username':   'otheruser',
                 'permission': 'does_not_exist',

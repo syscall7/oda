@@ -13,7 +13,7 @@ class DefineDataTests(OdaApiTestCase):
     def test_simple_ascii_string(self):
 
         # create an ascii string
-        response = self.client.post('/odapi/api/definedData/',
+        response = self.client.post('/odaapi/api/definedData/',
                                    {'revision': 0,
                                     'short_name': 'mkdir',
                                     'type_kind' : 'builtin',
@@ -26,7 +26,7 @@ class DefineDataTests(OdaApiTestCase):
         response_dd = response.data['definedData']
 
         # verify data was defined
-        response = self.client.get('/odapi/api/definedData/',
+        response = self.client.get('/odaapi/api/definedData/',
                                    {'revision': 0,
                                     'short_name': 'mkdir',
                                     },
@@ -51,7 +51,7 @@ class DefineDataTests(OdaApiTestCase):
         )
 
         # verify data is displayed correctly
-        response = self.client.get('/odapi/api/displayunits/',
+        response = self.client.get('/odaapi/api/displayunits/',
                            { 'revision': 0,
                              'short_name': 'mkdir',
                              'addr' : '0x400260',
@@ -60,10 +60,10 @@ class DefineDataTests(OdaApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         for expected, actual in zip(after_define_data, response.data):
-            self.assertEquals(expected[0], actual['opcode'])
-            self.assertEquals(expected[1], actual['vma'])
-            self.assertEquals(expected[2], actual['section_name'])
-            self.assertEquals(expected[3], actual['rawBytes'])
+            self.assertEqual(expected[0], actual['opcode'])
+            self.assertEqual(expected[1], actual['vma'])
+            self.assertEqual(expected[2], actual['section_name'])
+            self.assertEqual(expected[3], actual['rawBytes'])
 
     def test_merge_ascii_string(self):
         # TODO: Verify we can merge adjacent strings
@@ -71,7 +71,7 @@ class DefineDataTests(OdaApiTestCase):
 
     def test_undefine_string(self):
         # create an ascii string
-        response = self.client.post('/odapi/api/definedData/',
+        response = self.client.post('/odaapi/api/definedData/',
                                     {'revision': 0,
                                      'short_name': 'mkdir',
                                      'type_kind' : 'builtin',
@@ -83,7 +83,7 @@ class DefineDataTests(OdaApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # verify data was defined
-        response = self.client.get('/odapi/api/definedData/',
+        response = self.client.get('/odaapi/api/definedData/',
                                    {'revision': 0,
                                     'short_name': 'mkdir',
                                     },
@@ -93,7 +93,7 @@ class DefineDataTests(OdaApiTestCase):
         self.assertEqual(1, len(returned_dd))
 
         # undefine the data
-        response = self.client.delete('/odapi/api/definedData/0/',
+        response = self.client.delete('/odaapi/api/definedData/0/',
                                     {'revision': 0,
                                      'short_name': 'mkdir',
                                      'vma'       : 0x400260
@@ -102,7 +102,7 @@ class DefineDataTests(OdaApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # verify data was undefined
-        response = self.client.get('/odapi/api/definedData/',
+        response = self.client.get('/odaapi/api/definedData/',
                                    {'revision': 0,
                                     'short_name': 'mkdir',
                                     },

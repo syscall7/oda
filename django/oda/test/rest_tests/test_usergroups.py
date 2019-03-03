@@ -9,7 +9,7 @@ class UserGroupsUnitTest(OdaApiTestCase):
 
     def test_simple_create(self):
         response = self.client.post(
-            '/odaweb/api/usergroups/',
+            '/odaapi/api/usergroups/',
             {'name': 'mygroup'},
             format='json'
         )
@@ -19,14 +19,14 @@ class UserGroupsUnitTest(OdaApiTestCase):
 
     def test_duplicate_create(self):
         response = self.client.post(
-            '/odaweb/api/usergroups/',
+            '/odaapi/api/usergroups/',
             {'name': 'mygroup'},
             format='json'
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         response = self.client.post(
-            '/odaweb/api/usergroups/',
+            '/odaapi/api/usergroups/',
             {'name': 'mygroup'},
             format='json'
         )
@@ -35,7 +35,7 @@ class UserGroupsUnitTest(OdaApiTestCase):
 
     def test_get_list(self):
         response = self.client.get(
-            '/odaweb/api/usergroups/',
+            '/odaapi/api/usergroups/',
             format='json'
         )
         self.assertEqual(response.data, [])
@@ -44,7 +44,7 @@ class UserGroupsUnitTest(OdaApiTestCase):
         self.user.groups.add(group)
 
         response = self.client.get(
-            '/odaweb/api/usergroups/',
+            '/odaapi/api/usergroups/',
             format='json'
         )
         self.assertEqual(response.data[0]['name'], 'mygroup')
@@ -55,7 +55,7 @@ class UserGroupsUnitTest(OdaApiTestCase):
         otheruser.groups.add(othergroup)
 
         response = self.client.get(
-            '/odaweb/api/usergroups/',
+            '/odaapi/api/usergroups/',
             format='json'
         )
         self.assertEqual(len(response.data), 1)
@@ -66,7 +66,7 @@ class UserGroupsUnitTest(OdaApiTestCase):
         self.user.groups.add(group)
 
         response = self.client.get(
-            '/odaweb/api/usergroups/' + str(group.pk) + '/',
+            '/odaapi/api/usergroups/' + str(group.pk) + '/',
             format='json'
         )
         self.assertEqual(response.data['name'], 'mygroup')
@@ -78,7 +78,7 @@ class UserGroupsUnitTest(OdaApiTestCase):
         otheruser.groups.add(othergroup)
 
         response = self.client.get(
-            '/odaweb/api/usergroups/' + str(othergroup.pk) + '/',
+            '/odaapi/api/usergroups/' + str(othergroup.pk) + '/',
             format='json'
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -88,7 +88,7 @@ class UserGroupsUnitTest(OdaApiTestCase):
         self.user.groups.add(group)
 
         response = self.client.put(
-            '/odaweb/api/usergroups/' + str(group.pk) + '/',
+            '/odaapi/api/usergroups/' + str(group.pk) + '/',
             {'name': 'mygroup2'},
             format='json'
         )
@@ -102,7 +102,7 @@ class UserGroupsUnitTest(OdaApiTestCase):
         otheruser.groups.add(othergroup)
 
         response = self.client.put(
-            '/odaweb/api/usergroups/' + str(othergroup.pk) + '/',
+            '/odaapi/api/usergroups/' + str(othergroup.pk) + '/',
             {'name': 'mygroup2'},
             format='json'
         )
@@ -113,7 +113,7 @@ class UserGroupsUnitTest(OdaApiTestCase):
         self.user.groups.add(group)
 
         response = self.client.get(
-            '/odaweb/api/usergroups/' + str(group.pk) + '/',
+            '/odaapi/api/usergroups/' + str(group.pk) + '/',
             format='json'
         )
         self.assertEqual(response.data['name'], 'mygroup')
@@ -123,7 +123,7 @@ class UserGroupsUnitTest(OdaApiTestCase):
         otheruser.save()
 
         response = self.client.post(
-            '/odaweb/api/usergroups/' + str(group.pk) + '/user/',
+            '/odaapi/api/usergroups/' + str(group.pk) + '/user/',
             {'username': 'otheruser'},
             format='json'
         )
@@ -137,14 +137,14 @@ class UserGroupsUnitTest(OdaApiTestCase):
         otheruser.groups.add(group)
 
         response = self.client.delete(
-            '/odaweb/api/usergroups/' + str(group.pk) + '/user/',
+            '/odaapi/api/usergroups/' + str(group.pk) + '/user/',
             {'username': 'otheruser'},
             format='json'
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
         response = self.client.get(
-            '/odaweb/api/usergroups/' + str(group.pk) + '/',
+            '/odaapi/api/usergroups/' + str(group.pk) + '/',
             format='json'
         )
         self.assertEqual(len(response.data['users']), 1)
@@ -157,7 +157,7 @@ class UserGroupsUnitTest(OdaApiTestCase):
         otheruser.groups.add(group)
 
         response = self.client.post(
-            '/odaweb/api/usergroups/' + str(group.pk) + '/user/',
+            '/odaapi/api/usergroups/' + str(group.pk) + '/user/',
             {'username': self.TEST_USERNAME},
             format='json'
         )
@@ -170,7 +170,7 @@ class UserGroupsUnitTest(OdaApiTestCase):
         otheruser.groups.add(group)
 
         response = self.client.delete(
-            '/odaweb/api/usergroups/' + str(group.pk) + '/user/',
+            '/odaapi/api/usergroups/' + str(group.pk) + '/user/',
             {'username': self.TEST_USERNAME},
             format='json'
         )

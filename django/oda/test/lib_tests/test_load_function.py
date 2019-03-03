@@ -18,31 +18,31 @@ class TestLoadOperation(OdaLibTestCase):
         odb_file = OdbFile(BinaryFile(self.get_test_bin_path('ls'), 'elf64-x86-64', 'i386:x86-64'))
         odb_file.execute(LoadOperation())
 
-        self.assertEquals(26, len(odb_file.get_structure_list(Section)))
+        self.assertEqual(26, len(odb_file.get_structure_list(Section)))
 
-        self.assertEquals(120, len(odb_file.get_structure_list(Symbol)))
+        self.assertEqual(120, len(odb_file.get_structure_list(Symbol)))
 
-        self.assertEquals(2, len(odb_file.get_structure_list(Function)))
+        self.assertEqual(2, len(odb_file.get_structure_list(Function)))
 
-        self.assertEquals(1, len([x for x in odb_file.get_structure_list(Function) if x.name == '_init']))
-        self.assertEquals(1, len([x for x in odb_file.get_structure_list(Function) if x.name == '_fini']))
+        self.assertEqual(1, len([x for x in odb_file.get_structure_list(Function) if x.name == '_init']))
+        self.assertEqual(1, len([x for x in odb_file.get_structure_list(Function) if x.name == '_fini']))
 
-        self.assertEquals(1304, len(odb_file.get_structure_list(DataString)))
+        self.assertEqual(1304, len(odb_file.get_structure_list(DataString)))
 
-        self.assertEquals(1, len([s for s in odb_file.get_structure_list(DataString) if s.value == 'hide-control-chars']))
-        self.assertEquals(1, len([s for s in odb_file.get_structure_list(DataString) if s.value == 'error initializing month strings']))
+        self.assertEqual(1, len([s for s in odb_file.get_structure_list(DataString) if s.value == 'hide-control-chars']))
+        self.assertEqual(1, len([s for s in odb_file.get_structure_list(DataString) if s.value == 'error initializing month strings']))
 
     def test_basic_binary_loader(self):
         odb_file = OdbFile(BinaryFile(self.get_test_bin_path('ls.bin.x86-64'), 'binary', 'i386:x86-64'))
         odb_file.execute(LoadOperation())
 
-        self.assertEquals(1, len(odb_file.get_structure_list(Section)))
+        self.assertEqual(1, len(odb_file.get_structure_list(Section)))
 
-        self.assertEquals(0, len(odb_file.get_structure_list(Symbol)))
+        self.assertEqual(0, len(odb_file.get_structure_list(Symbol)))
 
-        self.assertEquals(0, len(odb_file.get_structure_list(Function)))
+        self.assertEqual(0, len(odb_file.get_structure_list(Function)))
 
-        self.assertEquals(857, len(odb_file.get_structure_list(DataString)))
+        self.assertEqual(857, len(odb_file.get_structure_list(DataString)))
 
     def test_load_string(self):
 

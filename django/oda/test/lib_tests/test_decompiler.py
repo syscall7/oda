@@ -15,8 +15,8 @@ class TestDecompiler(OdaLibTestCase):
 
         decompiler = OdaDecompiler(odb_file)
         results = decompiler.decompile(0x406b26)
-        self.assertEquals(0x4067A0, results.start)
-        self.assertEquals(0x406BC0, results.end)
+        self.assertEqual(0x4067A0, results.start)
+        self.assertEqual(0x406BC0, results.end)
         self.assertNotEquals("", results.source)
 
     def test_decompile_by_addr_nonexistent(self):

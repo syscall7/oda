@@ -17,9 +17,9 @@ class TestAddCStruct(OdaLibTestCase):
         item.append_field( BuiltinField(name='Field2',oda_type=builtin) )
         item.append_field( BuiltinField(name='Field3',oda_type=builtin) )
 
-        self.assertEquals(3, item.size)
+        self.assertEqual(3, item.size)
 
-        self.assertEquals(1, len(odb_file.get_structure_list(CStruct)))
+        self.assertEqual(1, len(odb_file.get_structure_list(CStruct)))
 
     def test_compound_add(self):
 
@@ -41,8 +41,8 @@ class TestAddCStruct(OdaLibTestCase):
                                                        field_types))
 
         struct_list = odb_file.get_structure_list(CStruct)
-        self.assertEquals(2, len(struct_list))
-        self.assertEquals(4, struct_list[1].size)
+        self.assertEqual(2, len(struct_list))
+        self.assertEqual(4, struct_list[1].size)
 
         # delete field from simpleStruct
         field_names = ['Field1', 'Field3']
@@ -54,5 +54,5 @@ class TestAddCStruct(OdaLibTestCase):
 
         struct_list = odb_file.get_structure_list(CStruct)
         sizeLen = struct_list[1].size
-        self.assertEquals(3, sizeLen )
+        self.assertEqual(3, sizeLen )
 

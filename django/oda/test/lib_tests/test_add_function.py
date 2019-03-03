@@ -15,13 +15,13 @@ class TestAddFunction(OdaLibTestCase):
         odb_file.execute(CreateFunctionOperation(TEST_VMA, TEST_NAME))
 
 
-        self.assertEquals(1, len(odb_file.get_structure_list(Function)))
+        self.assertEqual(1, len(odb_file.get_structure_list(Function)))
         f = odb_file.get_structure_list(Function)[0]
-        self.assertEquals(TEST_NAME, f.name)
+        self.assertEqual(TEST_NAME, f.name)
 
         odb_file.operations[-1].undo(odb_file)
 
-        self.assertEquals(0, len(odb_file.get_structure_list(Function)))
+        self.assertEqual(0, len(odb_file.get_structure_list(Function)))
 
     def test_multiple_add(self):
         odb_file = OdbFile()
@@ -32,15 +32,15 @@ class TestAddFunction(OdaLibTestCase):
         op2 = CreateFunctionOperation(TEST_VMA2, TEST_NAME2, sym_type='U')
         odb_file.execute(op2)
 
-        self.assertEquals(2, len(odb_file.get_structure_list(Function)))
+        self.assertEqual(2, len(odb_file.get_structure_list(Function)))
 
         op2.undo(odb_file)
-        self.assertEquals(1, len(odb_file.get_structure_list(Function)))
-        self.assertEquals(TEST_NAME, odb_file.get_structure_list(Function)[
+        self.assertEqual(1, len(odb_file.get_structure_list(Function)))
+        self.assertEqual(TEST_NAME, odb_file.get_structure_list(Function)[
             0].name)
 
         op1.undo(odb_file)
-        self.assertEquals(0, len(odb_file.get_structure_list(Function)))
+        self.assertEqual(0, len(odb_file.get_structure_list(Function)))
 
     def test_add_same_func_name_fails(self):
         odb_file = OdbFile()

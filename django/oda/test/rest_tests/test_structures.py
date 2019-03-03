@@ -14,7 +14,7 @@ class LabelUnitTest(OdaApiTestCase):
     urls = 'oda.urls'
 
     def test_labels(self):
-        response = self.client.get('/odaweb/api/labels/',
+        response = self.client.get('/odaapi/api/labels/',
                                    {'revision': 0, 'short_name': 'strcpy_x86'},
                                    format='json')
 
@@ -26,7 +26,7 @@ class FunctionUnitTest(OdaApiTestCase):
     urls = 'oda.urls'
 
     def test_functions(self):
-        response = self.client.get('/odaweb/api/functions/',
+        response = self.client.get('/odaapi/api/functions/',
                                    {'revision': 0, 'short_name': 'strcpy_x86'},
                                    format='json')
 
@@ -34,7 +34,7 @@ class FunctionUnitTest(OdaApiTestCase):
         rd = response.data
 
     def test_functions_mkdir(self):
-        response = self.client.get('/odaweb/api/functions/',
+        response = self.client.get('/odaapi/api/functions/',
                                    {'revision': 0, 'short_name': 'mkdir'},
                                    format='json')
 
@@ -45,7 +45,7 @@ class CommentUnitTest(OdaApiTestCase):
     urls = 'oda.urls'
 
     def test_comments(self):
-        response = self.client.get('/odaweb/api/comments/',
+        response = self.client.get('/odaapi/api/comments/',
                                    {'revision': 0, 'short_name': 'strcpy_x86'},
                                    format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -59,7 +59,7 @@ class SectionsTest(OdaApiTestCase):
     urls = 'oda.urls'
 
     def test_sections(self):
-        response = self.client.get('/odaweb/api/sections/',
+        response = self.client.get('/odaapi/api/sections/',
                                    {'revision': 0, 'short_name': 'mkdir'},
                                    format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -79,7 +79,7 @@ class SymbolsTest(OdaApiTestCase):
     urls = 'oda.urls'
 
     def test_symbols(self):
-        response = self.client.get('/odaweb/api/symbols/',
+        response = self.client.get('/odaapi/api/symbols/',
                                    {'revision': 0, 'short_name': 'mkdir'},
                                    format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -98,7 +98,7 @@ class StringsTest(OdaApiTestCase):
     urls = 'oda.urls'
 
     def test_strings(self):
-        response = self.client.get('/odaweb/api/strings/',
+        response = self.client.get('/odaapi/api/strings/',
                                    {'revision': 0, 'short_name': 'mkdir'},
                                    format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -106,7 +106,7 @@ class StringsTest(OdaApiTestCase):
         rd = response.data
 
         self.assertIsNotNone(rd)
-        self.assertEquals(259, len(rd))
+        self.assertEqual(259, len(rd))
         self.assertIsNotNone(rd[0]['addr'])
         self.assertIsNotNone(rd[0]['string'])
 
@@ -115,7 +115,7 @@ class BinaryStringTest(OdaApiTestCase):
     urls = 'oda.urls'
 
     def test_binary_strings(self):
-        response = self.client.patch('/odaweb/api/binarystrings/1/', {
+        response = self.client.patch('/odaapi/api/binarystrings/1/', {
             'binary_string': 'ABCD',
             'short_name': 'strcpy_x86',
             'revision': 0
@@ -132,14 +132,14 @@ class CStructsTest(OdaApiTestCase):
     def test_cstructs(self):
 
 
-        response = self.client.get('/odaweb/api/parcels/',
+        response = self.client.get('/odaapi/api/parcels/',
                                    { 'revision': 0,
                                      'short_name': 'mkdir'},
                                    format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # Add a struct object
-        response = self.client.get('/odaweb/api/cstructs/',
+        response = self.client.get('/odaapi/api/cstructs/',
                                    {'revision': 0, 'short_name': 'mkdir'},
                                    format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -147,10 +147,10 @@ class CStructsTest(OdaApiTestCase):
         rd = response.data
 
         self.assertIsNotNone(rd)
-        self.assertEquals(0, len(rd))
+        self.assertEqual(0, len(rd))
 
         # Check that the struct exists
-        response = self.client.post('/odaweb/api/cstructs/',
+        response = self.client.post('/odaapi/api/cstructs/',
                                    {'revision': 0,
                                     'short_name': 'mkdir',
                                     'name' : 'foo_struct_t',
@@ -160,7 +160,7 @@ class CStructsTest(OdaApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        response = self.client.get('/odaweb/api/cstructs/',
+        response = self.client.get('/odaapi/api/cstructs/',
                                    {'revision': 0, 'short_name': 'mkdir'},
                                    format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -168,10 +168,10 @@ class CStructsTest(OdaApiTestCase):
         rd = response.data
 
         self.assertIsNotNone(rd)
-        self.assertEquals(1, len(rd))
+        self.assertEqual(1, len(rd))
 
         # Add a second struct
-        response = self.client.post('/odaweb/api/cstructs/',
+        response = self.client.post('/odaapi/api/cstructs/',
                                    {'revision': 0,
                                     'short_name': 'mkdir',
                                     'name' : 'bar_struct_t',
@@ -183,7 +183,7 @@ class CStructsTest(OdaApiTestCase):
 
 
         # Get a list of available fields
-        response = self.client.get('/odaweb/api/cstructfieldtypes/',
+        response = self.client.get('/odaapi/api/cstructfieldtypes/',
                                    {'revision': 0, 'short_name': 'mkdir'},
                                    format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -191,11 +191,11 @@ class CStructsTest(OdaApiTestCase):
         rd = response.data
 
         self.assertIsNotNone(rd)
-        self.assertEquals(12, len(rd))
+        self.assertEqual(12, len(rd))
 
         #str(rd[0]['object_id'])
 
-        response = self.client.get('/odaweb/api/cstructs/'+ '0' + '/modify/',
+        response = self.client.get('/odaapi/api/cstructs/'+ '0' + '/modify/',
                                    {'revision': 0,
                                     'short_name': 'mkdir',
                                     'field_types[]' : [ 'uint16_t',
@@ -205,7 +205,7 @@ class CStructsTest(OdaApiTestCase):
                                    format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        response = self.client.get('/odaweb/api/cstructs/'+ '1' + '/modify/',
+        response = self.client.get('/odaapi/api/cstructs/'+ '1' + '/modify/',
                                    {'revision': 0,
                                     'short_name': 'mkdir',
                                     'field_types[]' : [ 'uint16_t'],
@@ -217,7 +217,7 @@ class CStructsTest(OdaApiTestCase):
 
         #
         # # Add a built-in type field
-        # response = self.client.get('/odaweb/api/cstructs/'+ '0' + '/append_field/',
+        # response = self.client.get('/odaapi/api/cstructs/'+ '0' + '/append_field/',
         #                            {'revision': 0,
         #                             'short_name': 'mkdir',
         #                             'field_type' : 'uint16_t',
@@ -226,7 +226,7 @@ class CStructsTest(OdaApiTestCase):
         # self.assertEqual(response.status_code, status.HTTP_200_OK)
         #
         # # Add a built-in type field
-        # response = self.client.get('/odaweb/api/cstructs/'+ '1' + '/append_field/',
+        # response = self.client.get('/odaapi/api/cstructs/'+ '1' + '/append_field/',
         #                            {'revision': 0,
         #                             'short_name': 'mkdir',
         #                             'field_type' : 'uint16_t',
@@ -236,7 +236,7 @@ class CStructsTest(OdaApiTestCase):
         #
         #
         # # Add a field that is another struct
-        # response = self.client.get('/odaweb/api/cstructs/'+ '0' + '/append_field/',
+        # response = self.client.get('/odaapi/api/cstructs/'+ '0' + '/append_field/',
         #                            {'revision': 0,
         #                             'short_name': 'mkdir',
         #                             'field_type' : 'bar_struct_t',
@@ -246,7 +246,7 @@ class CStructsTest(OdaApiTestCase):
 
 
         # Add a structure object
-        response = self.client.get('/odaweb/api/definedData/',
+        response = self.client.get('/odaapi/api/definedData/',
                            { 'revision': 0,
                              'short_name': 'mkdir',
                              'vma': 0x400238,
@@ -267,7 +267,7 @@ class CStructsTest(OdaApiTestCase):
             ('',     0x4014dd, '.init', '00'),
         )
 
-        response = self.client.get('/odaweb/api/displayunits/',
+        response = self.client.get('/odaapi/api/displayunits/',
                                    { 'revision': 0,
                                      'short_name': 'mkdir',
                                      'addr' : '0x400238',
@@ -275,14 +275,14 @@ class CStructsTest(OdaApiTestCase):
                                    format='json')
 
         # for expected, actual in zip(after_struct_add, rd):
-        #     self.assertEquals(expected[0], actual['opcode'])
-        #     self.assertEquals(expected[1], actual['vma'])
-        #     self.assertEquals(expected[2], actual['section_name'])
-        #     self.assertEquals(expected[3], actual['rawBytes'])
+        #     self.assertEqual(expected[0], actual['opcode'])
+        #     self.assertEqual(expected[1], actual['vma'])
+        #     self.assertEqual(expected[2], actual['section_name'])
+        #     self.assertEqual(expected[3], actual['rawBytes'])
         #
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        response = self.client.get('/odaweb/api/parcels/',
+        response = self.client.get('/odaapi/api/parcels/',
                                    { 'revision': 0,
                                      'short_name': 'mkdir'},
                                    format='json')

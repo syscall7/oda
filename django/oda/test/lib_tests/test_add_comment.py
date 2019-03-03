@@ -11,5 +11,5 @@ class TestAddFunction(OdaLibTestCase):
 
         odb_file.execute(CreateCommentOperation(123, 'This is a comment'))
 
-        self.assertEquals(1, len(odb_file.get_structure_list(Comment)))
+        self.assertEqual(1, len(odb_file.get_structure_list(Comment)))
 

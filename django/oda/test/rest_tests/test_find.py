@@ -6,7 +6,7 @@ class FindTest(OdaApiTestCase):
     urls = 'oda.urls'
 
     def test_find_str(self):
-        response = self.client.get('/odaweb/api/find/',
+        response = self.client.get('/odaapi/api/find/',
                                    { 'short_name': 'mkdir',
                                      'revision': 0,
                                      'bytes': '"GNU"',

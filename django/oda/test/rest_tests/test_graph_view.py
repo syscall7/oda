@@ -7,7 +7,7 @@ class GraphViewTest(OdaApiTestCase):
     urls = 'oda.urls'
 
     def test_graph_view_binary_string(self):
-        response = self.client.get('/odaweb/api/graph',
+        response = self.client.get('/odaapi/api/graph',
                                    { 'short_name': 'strcpy_x86',
                                      'revision': 0,
                                      'addr': 0 },
@@ -50,7 +50,7 @@ class GraphViewTest(OdaApiTestCase):
 
     # test the "open_safer" function in mkdir at 0x405cb4
     def test_mkdir_open_safer(self):
-        response = self.client.get('/odaweb/api/graph',
+        response = self.client.get('/odaapi/api/graph',
                                    { 'short_name': 'mkdir',
                                      'revision': 0,
                                      'addr': 0x405cb4 },

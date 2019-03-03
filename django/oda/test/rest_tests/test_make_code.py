@@ -9,17 +9,17 @@ class MakeCodeUnitTest(OdaApiTestCase):
     def test_size(self):
 
         def get_size():
-            response = self.client.get('/odaweb/api/displayunits/1/size/',
+            response = self.client.get('/odaapi/api/displayunits/1/size/',
                                        { 'revision': 0,
                                          'short_name': 'strcpy_x86'},
                                        format='json')
             return response.data
 
         # verify initial size
-        self.assertEquals(17, get_size())
+        self.assertEqual(17, get_size())
 
         # make data at fourth instruction
-        response = self.client.get('/odaweb/api/displayunits/1/makeData/',
+        response = self.client.get('/odaapi/api/displayunits/1/makeData/',
                                    { 'revision': 0,
                                      'short_name': 'strcpy_x86',
                                      'vma': 5},
@@ -28,10 +28,10 @@ class MakeCodeUnitTest(OdaApiTestCase):
         self.assertEqual(response.data['error'], None)
 
         # verify size
-        self.assertEquals(19, get_size())
+        self.assertEqual(19, get_size())
 
         # convert back to code
-        response = self.client.get('/odaweb/api/displayunits/1/makeCode/',
+        response = self.client.get('/odaapi/api/displayunits/1/makeCode/',
                                    { 'revision': 0,
                                      'short_name': 'strcpy_x86',
                                      'vma': 5},
@@ -40,12 +40,12 @@ class MakeCodeUnitTest(OdaApiTestCase):
         self.assertEqual(response.data['error'], None)
 
         # verify size
-        self.assertEquals(17, get_size())
+        self.assertEqual(17, get_size())
 
     def test_make_bad_code(self):
 
         # attempt to make code at an address with an invalid opcode
-        response = self.client.get('/odaweb/api/displayunits/1/makeCode/',
+        response = self.client.get('/odaapi/api/displayunits/1/makeCode/',
                                    { 'revision': 0,
                                      'short_name': 'mkdir',
                                      'vma': 0x4002cd},
@@ -58,7 +58,7 @@ class MakeCodeUnitTest(OdaApiTestCase):
 
     def test_make_code_on_code(self):
         # attempt to make code at an address that is already code
-        response = self.client.get('/odaweb/api/displayunits/1/makeCode/',
+        response = self.client.get('/odaapi/api/displayunits/1/makeCode/',
                                    { 'revision': 0,
                                      'short_name': 'mkdir',
                                      'vma': 0x4002cd},
@@ -161,7 +161,7 @@ class MakeCodeUnitTest(OdaApiTestCase):
         def get_and_verify_display_units(vma, expected_instrs):
 
             # get the display units
-            response = self.client.get('/odaweb/api/displayunits/',
+            response = self.client.get('/odaapi/api/displayunits/',
                                        { 'revision': 0,
                                          'short_name': 'mkdir',
                                          'addr' : '0x004014d0',
@@ -174,17 +174,17 @@ class MakeCodeUnitTest(OdaApiTestCase):
             # verify they are what we expect
             for expected, actual in zip(expected_instrs, rd):
                 isCode = expected[0] != ''
-                self.assertEquals(expected[0], actual['opcode'])
-                self.assertEquals(expected[1], actual['vma'])
-                self.assertEquals(expected[2], actual['section_name'])
-                self.assertEquals(expected[3], actual['rawBytes'])
-                self.assertEquals(isCode, actual['isCode'])
+                self.assertEqual(expected[0], actual['opcode'])
+                self.assertEqual(expected[1], actual['vma'])
+                self.assertEqual(expected[2], actual['section_name'])
+                self.assertEqual(expected[3], actual['rawBytes'])
+                self.assertEqual(isCode, actual['isCode'])
 
 
 
         def get_and_verify_parcels(expected_parcels):
             # get the parcels before converting to code
-            response = self.client.get('/odaweb/api/parcels/',
+            response = self.client.get('/odaapi/api/parcels/',
                                        { 'revision': 0,
                                          'short_name': 'mkdir'},
                                        format='json')
@@ -203,7 +203,7 @@ class MakeCodeUnitTest(OdaApiTestCase):
         get_and_verify_parcels(parcels_before)
 
         # convert the second call instruction to data bytes
-        response = self.client.get('/odaweb/api/displayunits/1/makeData/',
+        response = self.client.get('/odaapi/api/displayunits/1/makeData/',
                                    { 'revision': 0,
                                      'short_name': 'mkdir',
                                      'vma': 0x4014d9},
@@ -216,7 +216,7 @@ class MakeCodeUnitTest(OdaApiTestCase):
         get_and_verify_parcels(parcels_after)
 
         # convert the data back to code
-        response = self.client.get('/odaweb/api/displayunits/1/makeCode/',
+        response = self.client.get('/odaapi/api/displayunits/1/makeCode/',
                                    { 'revision': 0,
                                      'short_name': 'mkdir',
                                      'vma': 0x4014d9},

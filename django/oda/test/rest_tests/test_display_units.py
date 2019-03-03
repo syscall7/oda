@@ -7,7 +7,7 @@ class DisplayUnitTest(OdaApiTestCase):
     urls = 'oda.urls'
 
     def test_display_units(self):
-        response = self.client.get('/odapi/api/displayunits/',
+        response = self.client.get('/odaapi/api/displayunits/',
                                    {'revision': 0, 'short_name': 'strcpy_x86'},
                                    format='json')
 
@@ -43,7 +43,7 @@ class DisplayUnitTest(OdaApiTestCase):
 
         for vma, lines in tests:
 
-            response = self.client.get('/odapi/api/displayunits/', {
+            response = self.client.get('/odaapi/api/displayunits/', {
                             'revision': 0,
                             'short_name': 'mkdir',
                             'addr' : vma,
@@ -68,7 +68,7 @@ class DisplayUnitTest(OdaApiTestCase):
                 # actual['instStr']
 
     def test_display_units_mkdir_code(self):
-        response = self.client.get('/odapi/api/displayunits/',
+        response = self.client.get('/odaapi/api/displayunits/',
                                    {'revision': 0, 'short_name': 'mkdir', 'addr' : '0x4014d0'},
                                    format='json')
 
@@ -76,17 +76,17 @@ class DisplayUnitTest(OdaApiTestCase):
         rd = response.data
         self.assertIsNotNone(rd)
 
-        self.assertEquals(rd[0]['opcode'], 'sub')
-        self.assertEquals(rd[0]['operands'], 'rsp,0x8')
-        self.assertEquals(rd[0]['rawBytes'], '4883ec08')
-        self.assertEquals(rd[0]['vma'], 0x4014d0)
-        self.assertEquals(rd[0]['isBranch'], False)
-        self.assertEquals(rd[0]['isFunction'], True)
-        self.assertEquals(rd[0]['section_name'], '.init')
-        self.assertEquals(rd[0]['instStr'], 'sub    rsp,0x8')
+        self.assertEqual(rd[0]['opcode'], 'sub')
+        self.assertEqual(rd[0]['operands'], 'rsp,0x8')
+        self.assertEqual(rd[0]['rawBytes'], '4883ec08')
+        self.assertEqual(rd[0]['vma'], 0x4014d0)
+        self.assertEqual(rd[0]['isBranch'], False)
+        self.assertEqual(rd[0]['isFunction'], True)
+        self.assertEqual(rd[0]['section_name'], '.init')
+        self.assertEqual(rd[0]['instStr'], 'sub    rsp,0x8')
 
     def test_display_units_mkdir_data(self):
-        response = self.client.get('/odapi/api/displayunits/',
+        response = self.client.get('/odaapi/api/displayunits/',
                                    {'revision': 0, 'short_name': 'mkdir', 'addr' : '0x400238'},
                                    format='json')
 
@@ -94,17 +94,17 @@ class DisplayUnitTest(OdaApiTestCase):
         rd = response.data
         self.assertIsNotNone(rd)
 
-        self.assertEquals(rd[0]['opcode'], '')
-        self.assertEquals(rd[0]['operands'], '')
-        self.assertEquals(rd[0]['rawBytes'], '2f')
-        self.assertEquals(rd[0]['vma'], 0x400238)
-        self.assertEquals(rd[0]['isBranch'], False)
-        self.assertEquals(rd[0]['isFunction'], False)
-        self.assertEquals(rd[0]['section_name'], '.interp')
-        self.assertEquals(rd[0]['instStr'], "<insn>db</insn>  <span class='raw'>2fh</span> <span class='comment'>; /</span>")
+        self.assertEqual(rd[0]['opcode'], '')
+        self.assertEqual(rd[0]['operands'], '')
+        self.assertEqual(rd[0]['rawBytes'], '2f')
+        self.assertEqual(rd[0]['vma'], 0x400238)
+        self.assertEqual(rd[0]['isBranch'], False)
+        self.assertEqual(rd[0]['isFunction'], False)
+        self.assertEqual(rd[0]['section_name'], '.interp')
+        self.assertEqual(rd[0]['instStr'], "<insn>db</insn>  <span class='raw'>2fh</span> <span class='comment'>; /</span>")
 
     def test_display_units_mkdir_logical_data_and_code(self):
-        response = self.client.get('/odapi/api/displayunits/',
+        response = self.client.get('/odaapi/api/displayunits/',
                                    { 'revision': 0,
                                      'short_name': 'mkdir',
                                      'addr' : '10',
@@ -116,37 +116,37 @@ class DisplayUnitTest(OdaApiTestCase):
         rd = response.data
         self.assertIsNotNone(rd)
 
-        self.assertEquals(rd[0]['opcode'], '')
-        self.assertEquals(rd[0]['operands'], '')
-        self.assertEquals(rd[0]['rawBytes'], '6c')
-        self.assertEquals(rd[0]['vma'], 0x400242)
-        self.assertEquals(rd[0]['isBranch'], False)
-        self.assertEquals(rd[0]['isFunction'], False)
-        self.assertEquals(rd[0]['section_name'], '.interp')
-        self.assertEquals(rd[0]['instStr'], "<insn>db</insn>  <span class='raw'>6ch</span> <span class='comment'>; l</span>")
+        self.assertEqual(rd[0]['opcode'], '')
+        self.assertEqual(rd[0]['operands'], '')
+        self.assertEqual(rd[0]['rawBytes'], '6c')
+        self.assertEqual(rd[0]['vma'], 0x400242)
+        self.assertEqual(rd[0]['isBranch'], False)
+        self.assertEqual(rd[0]['isFunction'], False)
+        self.assertEqual(rd[0]['section_name'], '.interp')
+        self.assertEqual(rd[0]['instStr'], "<insn>db</insn>  <span class='raw'>6ch</span> <span class='comment'>; l</span>")
 
         # next data section
-        self.assertEquals(rd[18]['opcode'], '')
-        self.assertEquals(rd[18]['operands'], '')
-        self.assertEquals(rd[18]['rawBytes'], '04')
-        self.assertEquals(rd[18]['vma'], 0x400254)
-        self.assertEquals(rd[18]['isBranch'], False)
-        self.assertEquals(rd[18]['isFunction'], False)
-        self.assertEquals(rd[18]['section_name'], '.note.ABI-tag')
-        self.assertEquals(rd[18]['instStr'], "<insn>db</insn>  <span class='raw'>04h</span>")
+        self.assertEqual(rd[18]['opcode'], '')
+        self.assertEqual(rd[18]['operands'], '')
+        self.assertEqual(rd[18]['rawBytes'], '04')
+        self.assertEqual(rd[18]['vma'], 0x400254)
+        self.assertEqual(rd[18]['isBranch'], False)
+        self.assertEqual(rd[18]['isFunction'], False)
+        self.assertEqual(rd[18]['section_name'], '.note.ABI-tag')
+        self.assertEqual(rd[18]['instStr'], "<insn>db</insn>  <span class='raw'>04h</span>")
 
         # the last entry should be the first instruction of the first code section
-        self.assertEquals(rd[-1]['opcode'], 'sub')
-        self.assertEquals(rd[-1]['operands'], 'rsp,0x8')
-        self.assertEquals(rd[-1]['rawBytes'], '4883ec08')
-        self.assertEquals(rd[-1]['vma'], 0x4014d0)
-        self.assertEquals(rd[-1]['isBranch'], False)
-        self.assertEquals(rd[-1]['isFunction'], True)
-        self.assertEquals(rd[-1]['section_name'], '.init')
-        self.assertEquals(rd[-1]['instStr'], 'sub    rsp,0x8')
+        self.assertEqual(rd[-1]['opcode'], 'sub')
+        self.assertEqual(rd[-1]['operands'], 'rsp,0x8')
+        self.assertEqual(rd[-1]['rawBytes'], '4883ec08')
+        self.assertEqual(rd[-1]['vma'], 0x4014d0)
+        self.assertEqual(rd[-1]['isBranch'], False)
+        self.assertEqual(rd[-1]['isFunction'], True)
+        self.assertEqual(rd[-1]['section_name'], '.init')
+        self.assertEqual(rd[-1]['instStr'], 'sub    rsp,0x8')
 
     def test_display_units_mkdir_logical_code(self):
-        response = self.client.get('/odapi/api/displayunits/',
+        response = self.client.get('/odaapi/api/displayunits/',
                                    { 'revision': 0,
                                      'short_name': 'mkdir',
                                      'addr' : '4752',
@@ -157,30 +157,30 @@ class DisplayUnitTest(OdaApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         rd = response.data
         self.assertIsNotNone(rd)
-        self.assertEquals(len(rd), 100)
+        self.assertEqual(len(rd), 100)
 
         # first instruction of first code section
-        self.assertEquals(rd[0]['opcode'], 'sub')
-        self.assertEquals(rd[0]['operands'], 'rsp,0x8')
-        self.assertEquals(rd[0]['rawBytes'], '4883ec08')
-        self.assertEquals(rd[0]['vma'], 0x4014d0)
-        self.assertEquals(rd[0]['isBranch'], False)
-        self.assertEquals(rd[0]['isFunction'], True)
-        self.assertEquals(rd[0]['section_name'], '.init')
-        self.assertEquals(rd[0]['instStr'], 'sub    rsp,0x8')
+        self.assertEqual(rd[0]['opcode'], 'sub')
+        self.assertEqual(rd[0]['operands'], 'rsp,0x8')
+        self.assertEqual(rd[0]['rawBytes'], '4883ec08')
+        self.assertEqual(rd[0]['vma'], 0x4014d0)
+        self.assertEqual(rd[0]['isBranch'], False)
+        self.assertEqual(rd[0]['isFunction'], True)
+        self.assertEqual(rd[0]['section_name'], '.init')
+        self.assertEqual(rd[0]['instStr'], 'sub    rsp,0x8')
 
         # first instruction of next code section
-        self.assertEquals(rd[6]['opcode'], 'push')
-        self.assertEquals(rd[6]['operands'], 'QWORD PTR [rip+0x20eafa]        # 0x0060fff0')
-        self.assertEquals(rd[6]['rawBytes'], 'ff35faea2000')
-        self.assertEquals(rd[6]['vma'], 0x4014f0)
-        self.assertEquals(rd[6]['isBranch'], False)
-        self.assertEquals(rd[6]['isFunction'], True)
-        self.assertEquals(rd[6]['section_name'], '.plt')
-        self.assertEquals(rd[6]['instStr'], 'push   QWORD PTR [rip+0x20eafa]        # 0x0060fff0')
+        self.assertEqual(rd[6]['opcode'], 'push')
+        self.assertEqual(rd[6]['operands'], 'QWORD PTR [rip+0x20eafa]        # 0x0060fff0')
+        self.assertEqual(rd[6]['rawBytes'], 'ff35faea2000')
+        self.assertEqual(rd[6]['vma'], 0x4014f0)
+        self.assertEqual(rd[6]['isBranch'], False)
+        self.assertEqual(rd[6]['isFunction'], True)
+        self.assertEqual(rd[6]['section_name'], '.plt')
+        self.assertEqual(rd[6]['instStr'], 'push   QWORD PTR [rip+0x20eafa]        # 0x0060fff0')
 
     def test_display_units_mkdir_size(self):
-        response = self.client.get('/odapi/api/displayunits/1/size/',
+        response = self.client.get('/odaapi/api/displayunits/1/size/',
                                    { 'revision': 0,
                                      'short_name': 'mkdir'},
                                    format='json')
@@ -188,7 +188,7 @@ class DisplayUnitTest(OdaApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         rd = response.data
         self.assertIsNotNone(rd)
-        self.assertEquals(rd, 28439)
+        self.assertEqual(rd, 28439)
 
     def test_display_units_mkdir_vma_to_lda(self):
 
@@ -200,7 +200,7 @@ class DisplayUnitTest(OdaApiTestCase):
         )
 
         for vma, expected_lda in tests:
-            response = self.client.get('/odapi/api/displayunits/1/vmaToLda/',
+            response = self.client.get('/odaapi/api/displayunits/1/vmaToLda/',
                                        { 'revision': 0,
                                          'short_name': 'mkdir',
                                          'vma': vma},
@@ -208,7 +208,7 @@ class DisplayUnitTest(OdaApiTestCase):
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             actual_lda = response.data
-            self.assertEquals(expected_lda, actual_lda)
+            self.assertEqual(expected_lda, actual_lda)
 
     def test_display_units_mkdir_lda_to_vma(self):
 
@@ -220,7 +220,7 @@ class DisplayUnitTest(OdaApiTestCase):
         )
 
         for expected_vma, lda in tests:
-            response = self.client.get('/odapi/api/displayunits/1/ldaToVma/',
+            response = self.client.get('/odaapi/api/displayunits/1/ldaToVma/',
                                        { 'revision': 0,
                                          'short_name': 'mkdir',
                                          'lda': lda},
@@ -228,12 +228,12 @@ class DisplayUnitTest(OdaApiTestCase):
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             actual_vma = response.data
-            self.assertEquals(expected_vma, actual_vma)
+            self.assertEqual(expected_vma, actual_vma)
 
     def test_display_units_sorted_xrefs(self):
 
             # get the list of functions for the mkdir program
-            response = self.client.get('/odapi/api/functions/',
+            response = self.client.get('/odaapi/api/functions/',
                                {'revision': 0, 'short_name': 'mkdir'},
                                format='json')
 
@@ -243,7 +243,7 @@ class DisplayUnitTest(OdaApiTestCase):
             for f in functions:
                 print(f)
                 # request the display unit at the function address
-                response = self.client.get('/odapi/api/displayunits/', {
+                response = self.client.get('/odaapi/api/displayunits/', {
                                 'revision': 0,
                                 'short_name': 'mkdir',
                                 'addr' : f['vma'],

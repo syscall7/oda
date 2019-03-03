@@ -6,7 +6,7 @@ class DecompilerViewTest(OdaApiTestCase):
     urls = 'oda.urls'
 
     def test_decompiler_view_binary_string(self):
-        response = self.client.get('/odaweb/api/decompiler',
+        response = self.client.get('/odaapi/api/decompiler',
                                    { 'short_name': 'strcpy_x86',
                                      'revision': 0,
                                      'addr': 0 },
@@ -24,7 +24,7 @@ class DecompilerViewTest(OdaApiTestCase):
         self.assertNotEqual('', decompilerInfo['source'])
 
     def test_decompiler_view_binary_string_addr_nonexistent(self):
-        response = self.client.get('/odaweb/api/decompiler',
+        response = self.client.get('/odaapi/api/decompiler',
                                    { 'short_name': 'strcpy_x86',
                                      'revision': 0,
                                      'addr': 0xffffffff },
@@ -34,7 +34,7 @@ class DecompilerViewTest(OdaApiTestCase):
 
     # test the "open_safer" function in mkdir at 0x405cb4
     def test_decompiler_view_mkdir_open_safer(self):
-        response = self.client.get('/odaweb/api/decompiler',
+        response = self.client.get('/odaapi/api/decompiler',
                                    { 'short_name': 'mkdir',
                                      'revision': 0,
                                      'addr': 0x405cb4 },
@@ -51,7 +51,7 @@ class DecompilerViewTest(OdaApiTestCase):
         self.assertNotEqual('', decompilerInfo['source'])
 
     def test_decompiler_view_mkdir_addr_nonexistent(self):
-        response = self.client.get('/odaweb/api/decompiler',
+        response = self.client.get('/odaapi/api/decompiler',
                                    { 'short_name': 'mkdir',
                                      'revision': 0,
                                      'addr': 0xffffffff },

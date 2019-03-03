@@ -6,7 +6,7 @@ class OperationsViewTest(OdaApiTestCase):
     urls = 'oda.urls'
 
     def helper_fetch_operations(self, shortname):
-        response = self.client.get('/odaweb/api/operations/',
+        response = self.client.get('/odaapi/api/operations/',
                                    { 'short_name': shortname,
                                      'revision': 0},
                                    format='json')
@@ -24,7 +24,7 @@ class OperationsViewTest(OdaApiTestCase):
         shortname = 'mkdir'
 
         # make a comment
-        response = self.client.post('/odaweb/api/comments/',
+        response = self.client.post('/odaapi/api/comments/',
                                     {'revision': 0,
                                      'short_name': shortname,
                                      'vma': 0x400254,
@@ -44,7 +44,7 @@ class OperationsViewTest(OdaApiTestCase):
         shortname = 'mkdir'
 
         # create a function
-        response = self.client.post('/odaweb/api/displayunits/1/makeFunction/',
+        response = self.client.post('/odaapi/api/displayunits/1/makeFunction/',
                                     {'revision': 0,
                                      'short_name': 'mkdir',
                                      'vma': 4200833,

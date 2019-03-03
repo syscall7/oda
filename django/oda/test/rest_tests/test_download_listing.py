@@ -6,7 +6,7 @@ class DownloadListingTest(OdaApiTestCase):
     urls = 'oda.urls'
 
     def test_download_strcpy(self):
-        response = self.client.get('/odaweb/_download',
+        response = self.client.get('/odaapi/_download',
                                    { 'short_name': 'strcpy_x86',
                                      'revision': 0,
                                    },
