@@ -5,12 +5,12 @@ COMPRESS_ENABLED = False
 
 DATABASES = {
     'default': {
-        'ENGINE':   'django.db.backends.mysql',
+        'ENGINE':   'django.db.backends.postgresql',
         'NAME':     'odapython3',
-        'USER':     'root',
+        'USER':     'postgres',
         'PASSWORD': 'password',
         'HOST':     'db',         # Set to empty string for localhost.
-        'PORT':     '3306',                  # Set to empty string for default.
+        'PORT':     '',                  # Set to empty string for default.
     }
 }
 

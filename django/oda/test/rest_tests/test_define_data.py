@@ -13,7 +13,7 @@ class DefineDataTests(OdaApiTestCase):
     def test_simple_ascii_string(self):
 
         # create an ascii string
-        response = self.client.post('/odaweb/api/definedData/',
+        response = self.client.post('/odapi/api/definedData/',
                                    {'revision': 0,
                                     'short_name': 'mkdir',
                                     'type_kind' : 'builtin',
@@ -26,7 +26,7 @@ class DefineDataTests(OdaApiTestCase):
         response_dd = response.data['definedData']
 
         # verify data was defined
-        response = self.client.get('/odaweb/api/definedData/',
+        response = self.client.get('/odapi/api/definedData/',
                                    {'revision': 0,
                                     'short_name': 'mkdir',
                                     },
@@ -51,7 +51,7 @@ class DefineDataTests(OdaApiTestCase):
         )
 
         # verify data is displayed correctly
-        response = self.client.get('/odaweb/api/displayunits/',
+        response = self.client.get('/odapi/api/displayunits/',
                            { 'revision': 0,
                              'short_name': 'mkdir',
                              'addr' : '0x400260',
@@ -71,7 +71,7 @@ class DefineDataTests(OdaApiTestCase):
 
     def test_undefine_string(self):
         # create an ascii string
-        response = self.client.post('/odaweb/api/definedData/',
+        response = self.client.post('/odapi/api/definedData/',
                                     {'revision': 0,
                                      'short_name': 'mkdir',
                                      'type_kind' : 'builtin',
@@ -83,7 +83,7 @@ class DefineDataTests(OdaApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # verify data was defined
-        response = self.client.get('/odaweb/api/definedData/',
+        response = self.client.get('/odapi/api/definedData/',
                                    {'revision': 0,
                                     'short_name': 'mkdir',
                                     },
@@ -93,7 +93,7 @@ class DefineDataTests(OdaApiTestCase):
         self.assertEqual(1, len(returned_dd))
 
         # undefine the data
-        response = self.client.delete('/odaweb/api/definedData/0/',
+        response = self.client.delete('/odapi/api/definedData/0/',
                                     {'revision': 0,
                                      'short_name': 'mkdir',
                                      'vma'       : 0x400260
@@ -102,7 +102,7 @@ class DefineDataTests(OdaApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # verify data was undefined
-        response = self.client.get('/odaweb/api/definedData/',
+        response = self.client.get('/odapi/api/definedData/',
                                    {'revision': 0,
                                     'short_name': 'mkdir',
                                     },

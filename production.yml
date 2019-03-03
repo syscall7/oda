@@ -7,13 +7,14 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=odapython3
     healthcheck:
-      # test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       timeout: 20s
       retries: 10
     ports:
       - "5432:5432"
-    #volumes:
-    #  - ./postgres-data:/var/lib/postgresql/data
+    volumes:
+      # TODO Fix up this path
+      - ./postgres-data:/var/lib/postgresql/data
   backend:
     build:
       context: .
@@ -24,19 +25,9 @@ services:
     volumes:
       - .:/code
     ports:
-      - "8001:8001"
+      - "8000:8000"
     depends_on:
       - db
-  web:
-    build:
-      context: .
-      dockerfile: Dockerfile.nodejs
-    command: bash -c "npm install && npm run dev"
-    volumes:
-      - .:/code
-      - /code/web/node_modules
-    ports:
-      - "8000:8000"
   socket:
     build:
       context: .

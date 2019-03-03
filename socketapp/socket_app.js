@@ -121,23 +121,23 @@ io.on('connection', function (socket) {
 io.sockets.on('connection', function (socket) {
 
   console.log('A New User Has Connected');
-  
-  socket.on('subscribe', function(data) { 
+
+  socket.on('subscribe', function(data) {
     console.log('joined ',data);
     socket.join(data.room);
-    socket.broadcast.emit('join', data); 
+    socket.broadcast.emit('join', data);
   });
-  
+
   socket.on('unsubscribe', function(data) {
-    console.log('left ' + data.room); 
-    socket.leave(data.room); 
+    console.log('left ' + data.room);
+    socket.leave(data.room);
   });
 
   socket.on('comment', function (msg) {
-    console.log('I received a comment ', msg);    
+    console.log('I received a comment ', msg);
     socket.broadcast.emit('comment', msg);
   });
-  socket.on('label', function(msg) { 
+  socket.on('label', function(msg) {
     console.log('I received a label ',msg);
     socket.broadcast.emit('label', msg);
   });

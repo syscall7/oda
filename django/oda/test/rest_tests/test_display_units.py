@@ -7,7 +7,7 @@ class DisplayUnitTest(OdaApiTestCase):
     urls = 'oda.urls'
 
     def test_display_units(self):
-        response = self.client.get('/odaweb/api/displayunits/',
+        response = self.client.get('/odapi/api/displayunits/',
                                    {'revision': 0, 'short_name': 'strcpy_x86'},
                                    format='json')
 
@@ -43,7 +43,7 @@ class DisplayUnitTest(OdaApiTestCase):
 
         for vma, lines in tests:
 
-            response = self.client.get('/odaweb/api/displayunits/', {
+            response = self.client.get('/odapi/api/displayunits/', {
                             'revision': 0,
                             'short_name': 'mkdir',
                             'addr' : vma,
@@ -68,7 +68,7 @@ class DisplayUnitTest(OdaApiTestCase):
                 # actual['instStr']
 
     def test_display_units_mkdir_code(self):
-        response = self.client.get('/odaweb/api/displayunits/',
+        response = self.client.get('/odapi/api/displayunits/',
                                    {'revision': 0, 'short_name': 'mkdir', 'addr' : '0x4014d0'},
                                    format='json')
 
@@ -86,7 +86,7 @@ class DisplayUnitTest(OdaApiTestCase):
         self.assertEquals(rd[0]['instStr'], 'sub    rsp,0x8')
 
     def test_display_units_mkdir_data(self):
-        response = self.client.get('/odaweb/api/displayunits/',
+        response = self.client.get('/odapi/api/displayunits/',
                                    {'revision': 0, 'short_name': 'mkdir', 'addr' : '0x400238'},
                                    format='json')
 
@@ -104,7 +104,7 @@ class DisplayUnitTest(OdaApiTestCase):
         self.assertEquals(rd[0]['instStr'], "<insn>db</insn>  <span class='raw'>2fh</span> <span class='comment'>; /</span>")
 
     def test_display_units_mkdir_logical_data_and_code(self):
-        response = self.client.get('/odaweb/api/displayunits/',
+        response = self.client.get('/odapi/api/displayunits/',
                                    { 'revision': 0,
                                      'short_name': 'mkdir',
                                      'addr' : '10',
@@ -146,7 +146,7 @@ class DisplayUnitTest(OdaApiTestCase):
         self.assertEquals(rd[-1]['instStr'], 'sub    rsp,0x8')
 
     def test_display_units_mkdir_logical_code(self):
-        response = self.client.get('/odaweb/api/displayunits/',
+        response = self.client.get('/odapi/api/displayunits/',
                                    { 'revision': 0,
                                      'short_name': 'mkdir',
                                      'addr' : '4752',
@@ -180,7 +180,7 @@ class DisplayUnitTest(OdaApiTestCase):
         self.assertEquals(rd[6]['instStr'], 'push   QWORD PTR [rip+0x20eafa]        # 0x0060fff0')
 
     def test_display_units_mkdir_size(self):
-        response = self.client.get('/odaweb/api/displayunits/1/size/',
+        response = self.client.get('/odapi/api/displayunits/1/size/',
                                    { 'revision': 0,
                                      'short_name': 'mkdir'},
                                    format='json')
@@ -200,7 +200,7 @@ class DisplayUnitTest(OdaApiTestCase):
         )
 
         for vma, expected_lda in tests:
-            response = self.client.get('/odaweb/api/displayunits/1/vmaToLda/',
+            response = self.client.get('/odapi/api/displayunits/1/vmaToLda/',
                                        { 'revision': 0,
                                          'short_name': 'mkdir',
                                          'vma': vma},
@@ -220,7 +220,7 @@ class DisplayUnitTest(OdaApiTestCase):
         )
 
         for expected_vma, lda in tests:
-            response = self.client.get('/odaweb/api/displayunits/1/ldaToVma/',
+            response = self.client.get('/odapi/api/displayunits/1/ldaToVma/',
                                        { 'revision': 0,
                                          'short_name': 'mkdir',
                                          'lda': lda},
@@ -233,7 +233,7 @@ class DisplayUnitTest(OdaApiTestCase):
     def test_display_units_sorted_xrefs(self):
 
             # get the list of functions for the mkdir program
-            response = self.client.get('/odaweb/api/functions/',
+            response = self.client.get('/odapi/api/functions/',
                                {'revision': 0, 'short_name': 'mkdir'},
                                format='json')
 
@@ -243,7 +243,7 @@ class DisplayUnitTest(OdaApiTestCase):
             for f in functions:
                 print(f)
                 # request the display unit at the function address
-                response = self.client.get('/odaweb/api/displayunits/', {
+                response = self.client.get('/odapi/api/displayunits/', {
                                 'revision': 0,
                                 'short_name': 'mkdir',
                                 'addr' : f['vma'],

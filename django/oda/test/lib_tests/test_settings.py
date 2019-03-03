@@ -17,9 +17,9 @@ class TestSettings(OdaLibTestCase):
         binary = odb.get_binary()
         options = binary.options
 
-        self.assertEquals("arm", options.architecture)
-        self.assertEquals(0, options.base_address)
-        self.assertEquals('binary', options.target)
+        self.assertEqual("arm", options.architecture)
+        self.assertEqual(0, options.base_address)
+        self.assertEqual('binary', options.target)
 
     def test_set(self):
 
@@ -32,26 +32,26 @@ class TestSettings(OdaLibTestCase):
         odb.execute(modify)
         binary = odb.get_binary()
         options = binary.options
-        self.assertEquals("i386", options.architecture)
+        self.assertEqual("i386", options.architecture)
 
         modify = ModifySettingsFactory.set_base_address('1000')
         odb.execute(modify)
         binary = odb.get_binary()
         options = binary.options
-        self.assertEquals("1000", options.base_address)
+        self.assertEqual("1000", options.base_address)
 
         modify = ModifySettingsFactory.set_endian('BIG')
         odb.execute(modify)
         binary = odb.get_binary()
         options = binary.options
-        self.assertEquals("BIG", options.endian)
+        self.assertEqual("BIG", options.endian)
 
         modify = ModifySettingsFactory.set_values({'selected_opts': ["intel-mnemonic"]})
         odb.execute(modify)
         binary = odb.get_binary()
         options = binary.options
-        self.assertEquals(1, len(options.get_extra_options()))
-        self.assertEquals('intel-mnemonic', options.get_extra_options()[0])
+        self.assertEqual(1, len(options.get_extra_options()))
+        self.assertEqual('intel-mnemonic', options.get_extra_options()[0])
 
 
 
