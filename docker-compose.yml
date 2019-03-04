@@ -2,12 +2,12 @@ version: '3'
 
 services:
   db:
-    image: postgres
+    image: postgres:11.2
     environment:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=odapython3
     healthcheck:
-      # test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       timeout: 20s
       retries: 10
     ports:
@@ -17,7 +17,7 @@ services:
   backend:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.backend
     command: bash -c "./wait-for-it.sh -h db -p 5432 -t 0 && python3 django/manage.py migrate && python3 django/manage.py setup_oda && gunicorn --workers=4 --chdir django -b 0.0.0.0:8001 oda.wsgi"
     environment:
       - DJANGO_SETTINGS_MODULE=oda.settings.development
@@ -30,7 +30,7 @@ services:
   web:
     build:
       context: .
-      dockerfile: Dockerfile.nodejs
+      dockerfile: Dockerfile.web
     command: bash -c "npm install && npm run dev"
     volumes:
       - .:/code

@@ -3,7 +3,9 @@ from django.core.wsgi import get_wsgi_application
 
 try:
     filename = '/etc/oda/settings.py'
-    exec(compile(open(filename, 'rb').read(), filename, 'exec'))
+    settings_py = open(filename, 'r').read()
+    # print('Read settings.py as: \n' + settings_py)
+    exec(compile(settings_py, filename, 'exec'))
 except Exception as e:
     print('Missing /etc/oda/settings.py, assuming environment variables are set ...' + str(e))
 
