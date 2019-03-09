@@ -39,3 +39,5 @@ venv.bak/
 # auto-generated Sphinx documentation
 django/oda/apps/odaweb/static/doc
 !django/oda/apps/odaweb/static/doc/html/index.html
+
+production.yml
